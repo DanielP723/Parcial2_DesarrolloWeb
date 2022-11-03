@@ -4,9 +4,6 @@ export class IndexModel {
     public products: any;
     public pages: number;
     public currentPage: number;
-    public productsSearch: any;
-    public pagesSearch = 0;
-    public currentPageSearch = 0;
 
     constructor() {
         this.pages = 0;
@@ -43,11 +40,11 @@ export class IndexModel {
             .then(res => res.json())
             .then(data => {
                 if (data != NaN && data != null) {
-                    this.productsSearch = data;
+                    this.products = data;
                 }
             })
-            .then(() => this.pagesSearch = Math.ceil(this.productsSearch.length / 12))
-            .then(() => this.currentPageSearch = 1)
+            .then(() => this.pages = Math.ceil(this.products.length / 12))
+            .then(() => this.currentPage = 1)
             .catch(err => console.log(err));
     }
 }
