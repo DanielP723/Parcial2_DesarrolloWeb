@@ -4,13 +4,22 @@ export class IndexView {
     public paginationBar: any;
     // List of elements necessary to search. Index 0 is the button, Index 1 the browser
     public searchElements: any;
+    public elements: any;
+    // List of elemnts necessary to filter. 0 → lblMinPrice, 1 → lblMaxPrice, 2 → bntFilter, 3 → RangeMin,
+    //  4 → RangeMax, 5 → RangeInput, 6 → Range(View the progress), 7 → PriceGap
+    public filterElements: any;
 
     constructor() {
         this.container = this.getElement('container');
-        this.paginationBar = [this.getElement('pag1'), this.getElement('pag2'),this.getElement('pag3'),
-                            this.getElement('pag4'),this.getElement('pag5'), this.getElement('next'),
-                        this.getElement('previous')];
+        // Pagination Bar Elements
+        this.paginationBar = [this.getElement('pag1'), this.getElement('pag2'), this.getElement('pag3'),
+        this.getElement('pag4'), this.getElement('pag5'), this.getElement('next'), this.getElement('previous')];
+        // Search Elements
         this.searchElements = [this.getElement('btnBuscar'), this.getElement('busqueda')];
+        // Filter Price Elements
+        this.filterElements = [this.getElement('lblMinPrice'), this.getElement('lblMaxPrice'), 
+        this.getElement('filtrarPrecio'), this.getElement('range_min'), this.getElement('range_max'),
+        document.querySelectorAll(".range-input input"), document.querySelector(".slider .progress"), 5];
     }
 
     private getElement = (selector: string): HTMLElement | null => document.getElementById(selector);
@@ -62,12 +71,12 @@ export class IndexView {
             if (cont == currentPage) {
                 index = i;
             }
-            this.paginationBar[i-1].innerHTML = cont;
-            this.paginationBar[i-1].style.color = "#0d6efd";
+            this.paginationBar[i - 1].innerHTML = cont;
+            this.paginationBar[i - 1].style.color = "#0d6efd";
             if (cont <= 0) {
-                this.paginationBar[i-1].style.visibility = "hidden";
+                this.paginationBar[i - 1].style.visibility = "hidden";
             } else {
-                this.paginationBar[i-1].style.visibility = "visible";
+                this.paginationBar[i - 1].style.visibility = "visible";
             }
             cont--;
         }
@@ -87,12 +96,28 @@ export class IndexView {
                 this.paginationBar[5].style.visibility = "visible";
             }
         }
-        this.paginationBar[index-1].style.color = "green";
+        this.paginationBar[index - 1].style.color = "green";
     }
 
-    paginationBarVisible(){
+    paginationBarVisible() {
         for (let i = 0; i < this.paginationBar.length; i++) {
             this.paginationBar[i].style.visibility = "visible";
         }
+    }
+
+    setFilterPrice(maxPrice: number) {
+        if (maxPrice > 20) {
+            this.filterElements[7] = 5;
+        } else {
+            this.filterElements[7] = 1;
+        }
+        this.filterElements[0].innerHTML = 0 + "$";
+        this.filterElements[1].innerHTML = String(Math.ceil(maxPrice) - 3) + "$";
+        this.filterElements[3].max = Math.ceil(maxPrice);
+        this.filterElements[4].max = Math.ceil(maxPrice);
+        this.filterElements[4].value = Math.ceil(maxPrice) - 3;
+        this.filterElements[3].value = 0;
+        this.filterElements[6].style.left = 0 + "%";
+        this.filterElements[6].style.right = 100 - (this.filterElements[4].value / this.filterElements[5][1].max) * 100 + "%";
     }
 }
