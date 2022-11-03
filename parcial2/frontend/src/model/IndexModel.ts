@@ -49,6 +49,7 @@ export class IndexModel {
             })
             .then(() => this.pages = Math.ceil(this.products.length / 12))
             .then(() => this.currentPage = 1)
+            .then(() => this.getMax(this.products))
             .catch(err => console.log(err));
     }
 }
