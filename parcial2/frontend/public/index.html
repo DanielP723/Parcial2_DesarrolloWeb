@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/style.css">
+  <script src="https://kit.fontawesome.com/48c1f129e4.js" crossorigin="anonymous"></script>
+  <title>Buena Vida</title>
+</head>
+
+<body>
+  <div class="modaal">
+    <div class="contenedor_modal ">
+      <div class="contenido_modal" id="allModal">
+        <!-- MODAL ACÁ -->
+      </div>
+    </div>
+  </div>
+  <div class="container allContainer">
+    <div class="row">
+      <div class="col-3 mt-3">
+        <div class="logo">
+          <img id="imgLogo" src="images/logo.jpg" alt="logo" height="180">
+        </div>
+      </div>
+      <div class="col-9 mt-3">
+        <nav class="navbar">
+          <div class="container-fluid">
+            <form class="d-flex" role="search">
+              <input class="form-control me-2 inputBuscador" id="busqueda" type="search"
+                placeholder="¿Qué producto estás buscando?" aria-label="Search">
+              <i class="fa-solid fa-magnifying-glass iconoBuscar" id="btnBuscar"></i>
+              <ul class="buscadores">
+                <li class="favoritos listasUno" id="btnMisFavoritos">
+
+                  <i class="fa-regular fa-heart iconoFavoritos"></i>
+                  <p class="txtFavoritos">Mis Favoritos</p>
+
+                </li>
+                <li class="cuenta listasUno">
+                  <i class="fa-regular fa-user iconoCuenta"></i>
+                  <p class="txtCuenta">Mi Cuenta</p>
+                  <ul class="listaCuenta">
+                    <li class="borde"><a href=""><i class="fa-solid fa-user"></i>Mi cuenta</a></li>
+                    <li class="borde" id="btnMisFavoritos2"><a href="#"><i class="fa-regular fa-heart"></i>Mis
+                        favoritos</a></li>
+                    <li class="borde"><a href=""><i class="fa-solid fa-check"></i>Mi carrito</a></li>
+                    <li class="borde"><a href="./login.html" target="_blank"><i class="fa-solid fa-lock"></i>Entrar</a>
+                    </li>
+                    <li id="bordeN"><a href="./registro.html" target="_blank"><i class="fa-solid fa-user-plus"></i>Crear
+                        una cuenta</a></li>
+                  </ul>
+                </li>
+
+                <li class="carrito listasUno">
+                  <i class="fa-solid fa-cart-shopping iconoCarrito"></i>
+                  <p class="txtCarrito">Mi Carrito</p>
+                  <ul class="carroCompras" id="carroCompras">
+                    <div class="productosCarro" id="productosCarro">
+                      <div class="item" id="item">
+                        <div class="imagenPCarro">
+                          <!-- <img src="./src-eco-tienda/1.jpg" alt="" height="100"> -->
+                        </div>
+                        <div class="informacionPCarro">
+                          <h4 class="titulo">Titulo producto</h4>
+                          <p class="contenido">Media</p>
+                          <label for="cantidadPCarro" id="cant">Cantidad</label>
+                          <input type="number" class="cantidadPCarro" value="0" name="cantidadPCarro"
+                            id="cantidadPCarro" min="0" max="100">
+                        </div>
+                        <p class="precioPCarro" id="precioPCarro">15,5$</p>
+                        <i id="quitarPCarro" class="fa-solid fa-trash quitarProducto"></i>
+                      </div>
+
+
+                    </div>
+                    <div class="subtotalCarro">
+                      <p id="texto">Subtotal</p>
+                      <p id="precio">30.00$</p>
+                    </div>
+                    <div class="totalCarro">
+                      <p><b>TOTAL </b><span><b>(IVA incluido)</b></span></p>
+                      <p id="precioTotal"><b>38.00$</b></p>
+                    </div>
+                    <p id="alerta" class="alerta">Te faltan 6$ para el envio gratuito.</p>
+                    <li class="btnsCarro btn"><a href="#">Ir al carrito</a></li>
+                    <li class="btnsCarro"><a id="btn2" href="#">Realizar pedido</a></li>
+                  </ul>
+                </li>
+              </ul>
+
+            </form>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3 my-3">
+        <div class="wrapper" id="slide">
+          <h2>Precio</h2>
+          <div class='price-input'>
+            <div class='field'>
+              <span>Desde</span>
+              <div class='input-min' id='lblMinPrice'>0 $</div>
+            </div>
+            <div class='separator'>-</div>
+            <div class='field'>
+              <span>Hasta</span>
+              <div class='input-min' id='lblMaxPrice'>80 $</div>
+            </div>
+          </div>
+          <div class='slider'>
+            <div class='progress'></div>
+          </div>
+          <div class='range-input'>
+            <input type='range' id='range_min' class='range-min' min='0' max='80' value='0' step='1'>
+            <input type='range' id='range_max' class='range-max' min='0' max='80' value='78' step='1'>
+          </div>
+          <div class="filtrar" id="filtrarPrecio">
+            Filtrar
+          </div>
+        </div>
+      </div>
+      <div class="col-9" id="container">
+        <!-- PRODUCTOS ACÁ -->
+      </div>
+    </div>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" id="previous" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item"><a class="page-link" id="pag1" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" id="pag2" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" id="pag3" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" id="pag4" href="#">4</a></li>
+        <li class="page-item"><a class="page-link" id="pag5" href="#">5</a></li>
+        <li class="page-item">
+          <a class="page-link" id="next" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+</body>
+<script src="./js/index.js" type="module"></script>
+
+</html>
