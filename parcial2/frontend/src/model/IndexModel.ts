@@ -4,10 +4,12 @@ export class IndexModel {
     public products: any;
     public pages: number;
     public currentPage: number;
+    public maxValue: number;
 
     constructor() {
         this.pages = 0;
         this.currentPage = 0;
+        this.maxValue = 0;
     }
 
     saveProducts = async () => {
@@ -25,8 +27,10 @@ export class IndexModel {
     }
 
     getMax(products: any){
-        let productsSort = products.sort(products.price);
-        console.log(productsSort[productsSort.length-1]);
+        const resultadosOrdenados = products.sort((a: any,b: any) =>{
+            return Number.parseInt(b.price) - Number.parseInt(a.price)
+          })
+        this.maxValue = Math.ceil(resultadosOrdenados[0].price);
     }
 
     searchProducts = async (query: string) => {

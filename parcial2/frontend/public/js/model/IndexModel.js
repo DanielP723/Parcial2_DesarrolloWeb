@@ -10,8 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 export class IndexModel {
     constructor() {
         this.URI = 'http://localhost:1802/';
-        this.pagesSearch = 0;
-        this.currentPageSearch = 0;
         this.saveProducts = () => __awaiter(this, void 0, void 0, function* () {
             yield fetch(`${this.URI}api/products`)
                 .then(res => res.json())
@@ -36,23 +34,21 @@ export class IndexModel {
                 .then(res => res.json())
                 .then(data => {
                 if (data != NaN && data != null) {
-                    this.productsSearch = data;
+                    this.products = data;
                 }
             })
-                .then(() => this.pagesSearch = Math.ceil(this.productsSearch.length / 12))
-                .then(() => this.currentPageSearch = 1)
+                .then(() => this.pages = Math.ceil(this.products.length / 12))
+                .then(() => this.currentPage = 1)
                 .catch(err => console.log(err));
         });
         this.pages = 0;
         this.currentPage = 0;
+        this.maxValue = 0;
     }
     getMax(products) {
-        let productsSort = products.sort(products.price);
-        console.log(productsSort[productsSort.length - 1]);
-    }
-    restartSearch() {
-        this.productsSearch = [];
-        this.pagesSearch = 0;
-        this.currentPageSearch = 0;
+        const resultadosOrdenados = products.sort((a, b) => {
+            return Number.parseInt(b.price) - Number.parseInt(a.price);
+        });
+        this.maxValue = Math.ceil(resultadosOrdenados[0].price);
     }
 }

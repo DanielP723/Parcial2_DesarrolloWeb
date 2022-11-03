@@ -25,14 +25,13 @@ export class IndexController {
             let query = String(this.view.searchElements[1].value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
             if (query.length != 0) {
                 yield this.model.searchProducts(query);
-                this.view.showProducts(this.model.productsSearch, this.model.currentPageSearch);
-                this.view.pagination(this.model.pagesSearch, this.model.currentPageSearch);
+                this.view.showProducts(this.model.products, this.model.currentPage);
+                this.view.pagination(this.model.pages, this.model.currentPage);
             }
             else {
                 yield this.model.saveProducts();
                 this.view.showProducts(this.model.products, 1);
                 this.view.pagination(this.model.pages, this.model.currentPage);
-                this.model.restartSearch();
             }
         }));
     }
