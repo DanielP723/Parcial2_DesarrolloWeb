@@ -50,10 +50,4 @@ export class IndexModel {
             .then(() => this.currentPageSearch = 1)
             .catch(err => console.log(err));
     }
-
-    restartSearch() {
-        this.productsSearch = [];
-        this.pagesSearch = 0;
-        this.currentPageSearch = 0;
-    }
 }
