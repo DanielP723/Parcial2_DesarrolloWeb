@@ -13,6 +13,7 @@ export class IndexController {
             yield this.model.saveProducts();
             this.view.showProducts(this.model.products, 1);
             this.view.pagination(this.model.pages, this.model.currentPage);
+            this.view.setFilterPrice(this.model.maxPrice);
             this.addMethodsPaginationBar(this.view.paginationBar);
             this.addMethodSearch();
         });

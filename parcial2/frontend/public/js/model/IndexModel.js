@@ -43,12 +43,12 @@ export class IndexModel {
         });
         this.pages = 0;
         this.currentPage = 0;
-        this.maxValue = 0;
+        this.maxPrice = 0;
     }
     getMax(products) {
         const resultadosOrdenados = products.sort((a, b) => {
             return Number.parseInt(b.price) - Number.parseInt(a.price);
         });
-        this.maxValue = Math.ceil(resultadosOrdenados[0].price);
+        this.maxPrice = Math.ceil(resultadosOrdenados[0].price);
     }
 }
