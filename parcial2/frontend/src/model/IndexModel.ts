@@ -27,7 +27,8 @@ export class IndexModel {
     }
 
     getMax(products: any){
-        const resultadosOrdenados = products.sort((a: any,b: any) =>{
+        let productsCopy = products.slice();
+        const resultadosOrdenados = productsCopy.sort((a: any,b: any) =>{
             return Number.parseInt(b.price) - Number.parseInt(a.price)
           })
         this.maxPrice = Math.ceil(resultadosOrdenados[0].price);
