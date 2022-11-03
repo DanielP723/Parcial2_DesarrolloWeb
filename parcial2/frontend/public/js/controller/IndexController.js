@@ -14,12 +14,42 @@ export class IndexController {
             this.view.showProducts(this.model.products, 1);
             this.view.pagination(this.model.pages, this.model.currentPage);
             this.view.setFilterPrice(this.model.maxPrice);
+            this.addMethodFilterPrice(this.view.filterElements);
             this.addMethodsPaginationBar(this.view.paginationBar);
             this.addMethodSearch();
         });
         this.view = view;
         this.model = model;
         this.config();
+        this.view.logo.addEventListener('click', () => {
+            window.location.reload();
+        });
+    }
+    addMethodFilterPrice(filterElements) {
+        filterElements[3].addEventListener('click', () => {
+            let minVal = parseInt(filterElements[3].value);
+            let maxVal = parseInt(filterElements[4].value);
+            if ((maxVal - minVal) < filterElements[7]) {
+                minVal = maxVal - filterElements[7];
+                filterElements[3].value = minVal;
+            }
+            filterElements[0].innerHTML = String(minVal) + " $";
+            filterElements[1].innerHTML = String(maxVal) + " $";
+            filterElements[6].style.left = ((minVal / filterElements[5][0].max) * 100) + "%";
+            filterElements[6].style.right = 100 - (maxVal / filterElements[5][1].max) * 100 + "%";
+        });
+        filterElements[4].addEventListener('click', () => {
+            let minVal = parseInt(filterElements[3].value);
+            let maxVal = parseInt(filterElements[4].value);
+            if ((maxVal - minVal) < filterElements[7]) {
+                maxVal = minVal + filterElements[7];
+                filterElements[4].value = maxVal;
+            }
+            filterElements[0].innerHTML = String(minVal) + " $";
+            filterElements[1].innerHTML = String(maxVal) + " $";
+            filterElements[6].style.left = ((minVal / filterElements[5][0].max) * 100) + "%";
+            filterElements[6].style.right = 100 - (maxVal / filterElements[5][1].max) * 100 + "%";
+        });
     }
     addMethodSearch() {
         this.view.searchElements[0].addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
@@ -28,11 +58,13 @@ export class IndexController {
                 yield this.model.searchProducts(query);
                 this.view.showProducts(this.model.products, this.model.currentPage);
                 this.view.pagination(this.model.pages, this.model.currentPage);
+                this.view.setFilterPrice(this.model.maxPrice);
             }
             else {
                 yield this.model.saveProducts();
                 this.view.showProducts(this.model.products, 1);
                 this.view.pagination(this.model.pages, this.model.currentPage);
+                this.view.setFilterPrice(this.model.maxPrice);
             }
         }));
     }

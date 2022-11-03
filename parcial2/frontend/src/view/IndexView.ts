@@ -1,6 +1,7 @@
 export class IndexView {
 
     private container: any;
+    public logo: any;
     public paginationBar: any;
     // List of elements necessary to search. Index 0 is the button, Index 1 the browser
     public searchElements: any;
@@ -20,6 +21,7 @@ export class IndexView {
         this.filterElements = [this.getElement('lblMinPrice'), this.getElement('lblMaxPrice'), 
         this.getElement('filtrarPrecio'), this.getElement('range_min'), this.getElement('range_max'),
         document.querySelectorAll(".range-input input"), document.querySelector(".slider .progress"), 5];
+        this.logo = this.getElement('imgLogo');
     }
 
     private getElement = (selector: string): HTMLElement | null => document.getElementById(selector);
@@ -40,7 +42,11 @@ export class IndexView {
                 html += "<img  src='" + products[index].image + "'alt='product" + String(index + 1) + "'>" +
                     "     </div>" +
                     "    <div class='descripcion'> ";
-                html += "<h4 id='nombre" + String(products[index].ID) + "'>" + products[index].name + "</h4>";
+                if (products[index].name.length > 16) {
+                    html += "<h4 id='nombre" + String(products[index].ID) + "'>" + products[index].name.substring(0, 13) + "...</h4>"
+                } else {
+                    html += "<h4 id='nombre" + String(products[index].ID) + "'>" + products[index].name + "</h4>";
+                }
                 html +=
                     "        <h6 id='cantidad'>" + products[index].discount + "</h6>" +
                     "        <label id='marca'>" + products[index].brand + "</label>" +
