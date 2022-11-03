@@ -57,6 +57,7 @@ body {
   .inputBuscador {
     width: 400px;
     height: 50px;
+    border-radius: 30px;
   }
   
   .iconoBuscar {
@@ -145,9 +146,10 @@ body {
   .logo img {
     width: 150px;
     height: 60px;
-    border-radius: 3px;
+    border-radius: 8px;
     cursor: pointer;
   }
+  
   
   /*
               Inicio estilo Slider de precios        
