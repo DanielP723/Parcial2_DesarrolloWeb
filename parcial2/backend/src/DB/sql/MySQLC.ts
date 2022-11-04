@@ -1,15 +1,18 @@
 var mysql      = require('mysql');
+
 var connection = mysql.createConnection({
-    host     : 'localhost:3307',
+    host     : 'localhost',
+    database : 'parcialweb',
     user     : 'root',
-    password : 'informatica'
+    password : ''
 });
 
-connection.connect();
-
-connection.query('SELECT 1 + 1 AS solution', function(err:any, rows:any, fields:any) {
-    if (err) throw err;
-    console.log('The solution is: ', rows[0].solution);
+connection.connect(function(error:any){
+    if(error){
+        throw error;
+    }else{
+        console.log('CONEXIÓN EXITOSA');
+    }
 });
 
 connection.end();
