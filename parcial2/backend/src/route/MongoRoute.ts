@@ -15,6 +15,7 @@ class MongoRoute{
     private config = () => {
         this.router.get('/products', this.controller.getProducts);
         this.router.post('/search', this.controller.searchProducts);
+        this.router.post('/filter', this.controller.filterPriceProducts);
     }
 }
 

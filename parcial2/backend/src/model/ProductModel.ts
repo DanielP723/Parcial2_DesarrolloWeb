@@ -19,6 +19,13 @@ class ProductModel{
         const products = await this.MongoDBC.ProductSchema.find({name: new RegExp(query, 'i')});
         fn(products);
     }
+
+    public filterPriceProducts = async (min: number, max: number, fn: Function) => {
+        console.log(min);console.log(max);
+        this.MongoDBC.connection();
+        const products = await this.MongoDBC.ProductSchema.find({price: {$gte: min, $lte: max}});
+        fn(products);
+    }
 }
 
 export default ProductModel;

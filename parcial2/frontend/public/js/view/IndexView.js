@@ -14,6 +14,10 @@ export class IndexView {
         this.logo = this.getElement('imgLogo');
     }
     showProducts(products, page) {
+        if (products.length == 0) {
+            this.container.innerHTML = '';
+            return;
+        }
         let html = '';
         let index = (page - 1) * 12;
         let stop = false;

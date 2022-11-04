@@ -25,6 +25,13 @@ class ProductModel {
             const products = yield this.MongoDBC.ProductSchema.find({ name: new RegExp(query, 'i') });
             fn(products);
         });
+        this.filterPriceProducts = (min, max, fn) => __awaiter(this, void 0, void 0, function* () {
+            console.log(min);
+            console.log(max);
+            this.MongoDBC.connection();
+            const products = yield this.MongoDBC.ProductSchema.find({ price: { $gte: min, $lte: max } });
+            fn(products);
+        });
         this.MongoDBC = new MongoDBC_1.default();
     }
 }

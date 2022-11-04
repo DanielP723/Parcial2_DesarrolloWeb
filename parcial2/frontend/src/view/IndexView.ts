@@ -27,6 +27,10 @@ export class IndexView {
     private getElement = (selector: string): HTMLElement | null => document.getElementById(selector);
 
     showProducts(products: any, page: number) {
+        if(products.length == 0){
+            this.container.innerHTML = '';
+            return;
+        }
         let html = '';
         let index = (page - 1) * 12;
         let stop = false;

@@ -39,7 +39,24 @@ export class IndexModel {
             })
                 .then(() => this.pages = Math.ceil(this.products.length / 12))
                 .then(() => this.currentPage = 1)
-                .then(() => this.getMax(this.products))
+                .catch(err => console.log(err));
+        });
+        this.filterPriceProducts = (min, max) => __awaiter(this, void 0, void 0, function* () {
+            yield fetch(`${this.URI}api/filter`, {
+                method: 'POST',
+                body: JSON.stringify({ min: min, max: max }),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                if (data != NaN && data != null) {
+                    this.products = data;
+                }
+            })
+                .then(() => this.pages = Math.ceil(this.products.length / 12))
+                .then(() => this.currentPage = 1)
                 .catch(err => console.log(err));
         });
         this.pages = 0;

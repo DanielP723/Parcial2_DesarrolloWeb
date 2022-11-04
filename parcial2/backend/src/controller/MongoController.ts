@@ -20,6 +20,12 @@ class MongoController {
             res.json(products);
         });
     }
+
+    public filterPriceProducts = (req: Request, res: Response) => {
+        this.model.filterPriceProducts(req.body.min, req.body.max, (products: any) => {
+            res.json(products);
+        });
+    }
 }
 
 export default MongoController;

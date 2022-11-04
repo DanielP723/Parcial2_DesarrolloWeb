@@ -26,11 +26,11 @@ export class IndexModel {
             .catch(err => console.log(err));
     }
 
-    getMax(products: any){
+    getMax(products: any) {
         let productsCopy = products.slice();
-        const resultadosOrdenados = productsCopy.sort((a: any,b: any) =>{
+        const resultadosOrdenados = productsCopy.sort((a: any, b: any) => {
             return Number.parseInt(b.price) - Number.parseInt(a.price)
-          })
+        })
         this.maxPrice = Math.ceil(resultadosOrdenados[0].price);
     }
 
@@ -50,7 +50,25 @@ export class IndexModel {
             })
             .then(() => this.pages = Math.ceil(this.products.length / 12))
             .then(() => this.currentPage = 1)
-            .then(() => this.getMax(this.products))
+            .catch(err => console.log(err));
+    }
+
+    filterPriceProducts = async (min: number, max: number) => {
+        await fetch(`${this.URI}api/filter`, {
+            method: 'POST',
+            body: JSON.stringify({ min: min, max: max }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data != NaN && data != null) {
+                    this.products = data;
+                }
+            })
+            .then(() => this.pages = Math.ceil(this.products.length / 12))
+            .then(() => this.currentPage = 1)
             .catch(err => console.log(err));
     }
 }

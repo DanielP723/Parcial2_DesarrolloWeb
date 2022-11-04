@@ -26,6 +26,7 @@ export class IndexController {
     }
 
     addMethodFilterPrice(filterElements: any) {
+        // Handle changes slider
         filterElements[3].addEventListener('click', () => {
             let minVal = parseInt(filterElements[3].value);
             let maxVal = parseInt(filterElements[4].value);
@@ -50,6 +51,16 @@ export class IndexController {
             filterElements[6].style.left = ((minVal / filterElements[5][0].max) * 100) + "%";
             filterElements[6].style.right = 100 - (maxVal / filterElements[5][1].max) * 100 + "%";
         });
+
+        // Button operation
+        filterElements[2].addEventListener('click', async () => {
+            let min = filterElements[3].value;
+            let max = filterElements[4].value;
+            if (min >= 0 && min < this.model.maxPrice && max <= this.model.maxPrice && max > min) {
+                await this.model.filterPriceProducts(min, max);
+                this.showProducts();
+            }
+        })
     }
 
     addMethodSearch() {
@@ -57,14 +68,10 @@ export class IndexController {
             let query = String(this.view.searchElements[1].value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
             if (query.length != 0) {
                 await this.model.searchProducts(query);
-                this.view.showProducts(this.model.products, this.model.currentPage);
-                this.view.pagination(this.model.pages, this.model.currentPage);
-                this.view.setFilterPrice(this.model.maxPrice);
+                this.showProducts();
             } else {
                 await this.model.saveProducts();
-                this.view.showProducts(this.model.products, 1);
-                this.view.pagination(this.model.pages, this.model.currentPage);
-                this.view.setFilterPrice(this.model.maxPrice);
+                this.showProducts();
             }
         })
     }
@@ -98,5 +105,10 @@ export class IndexController {
                 }
             }
         }
+    }
+
+    showProducts() {
+        this.view.showProducts(this.model.products, 1);
+        this.view.pagination(this.model.pages, this.model.currentPage);
     }
 }

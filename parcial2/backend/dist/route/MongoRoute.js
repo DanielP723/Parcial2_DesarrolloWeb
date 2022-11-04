@@ -10,6 +10,7 @@ class MongoRoute {
         this.config = () => {
             this.router.get('/products', this.controller.getProducts);
             this.router.post('/search', this.controller.searchProducts);
+            this.router.post('/filter', this.controller.filterPriceProducts);
         };
         this.router = (0, express_1.Router)();
         this.controller = new MongoController_1.default();

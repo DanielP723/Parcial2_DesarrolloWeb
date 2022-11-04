@@ -16,6 +16,11 @@ class MongoController {
                 res.json(products);
             });
         };
+        this.filterPriceProducts = (req, res) => {
+            this.model.filterPriceProducts(req.body.min, req.body.max, (products) => {
+                res.json(products);
+            });
+        };
         this.model = new ProductModel_1.default();
     }
 }
