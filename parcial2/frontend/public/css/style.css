@@ -22,7 +22,7 @@ body {
     visibility: hidden;
     color: red;
     position: relative;
-    top: 10px;
+    top: 40px;
     right: 10px;
     float: right;
     font-size: 20px;
@@ -36,12 +36,14 @@ body {
   }
   
   .imagen img {
-    height: 250px;
+    height: 220px;
     width: 100%;
   }
   
+  
   .precio {
-    color: #5CCB5F;
+    color: #55c720;
+    margin-bottom: 18px;
   }
   
   .pagination {
@@ -49,13 +51,32 @@ body {
     --bs-pagination-focus-bg: none;
     --bs-pagination-focus-box-shadow: none;
   }
+
+  .pagination li{
+    width: 60px;
+    height: 80px;
+    color: #000;
+    text-align: center;
+    border-radius: 8px;
+  }
+
+  .pagination li a{
+    margin: 5px 10px;
+    border-radius: 5px;
+  }
   
   .page-link {
     color: #0d6efd;
   }
   
+
+  #btnMisFavoritos i,
+  #ico{
+    margin-right: -5px;
+  }
+
   .inputBuscador {
-    width: 400px;
+    width: 450px;
     height: 50px;
     border-radius: 30px;
   }
@@ -63,7 +84,7 @@ body {
   .iconoBuscar {
     cursor: pointer;
     padding-top: 16px;
-    color: #5CCB5F;
+    color: #55c720;
   }
   
   .favoritos {
@@ -79,7 +100,7 @@ body {
   }
   
   .iconoFavoritos {
-    color: #5CCB5F;
+    color: #55c720;
     padding: 10px 10px 20px;
   }
   
@@ -105,7 +126,7 @@ body {
   }
   
   .iconoCuenta {
-    color: #5CCB5F;
+    color: #55c720;
     padding: 10px 10px 20px;
   }
   
@@ -128,7 +149,7 @@ body {
   }
   
   .iconoCarrito {
-    color: #5CCB5F;
+    color: #55c720;
     padding: 10px 10px 20px;
   }
   
@@ -178,7 +199,7 @@ body {
     padding: 8px;
     color: white;
     border-radius: 25px;
-    background-color: #5CCB5F;
+    background-color: #55c720;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -241,7 +262,7 @@ body {
     right: 5%;
     position: absolute;
     border-radius: 5px;
-    background: #5CCB5F;
+    background: #55c720;
   }
   
   .range-input {
@@ -262,7 +283,7 @@ body {
     height: 17px;
     width: 17px;
     border-radius: 50%;
-    background: #5CCB5F;
+    background: #55c720;
     pointer-events: auto;
     -webkit-appearance: none;
   }
@@ -421,7 +442,7 @@ body {
   
   .contenedor .formulario .registro .cuentaNormal:hover,
   .contenedor .formulario .inicio .cuentaNormal:hover {
-    background: #5ccb5f;
+    background: #55c720;
   }
   
   .contenedor .formulario .registro .cuentaFacebook,
@@ -494,11 +515,11 @@ body {
   }
   
   .agregar {
-    background: #5CCB5F;
+    background: #55c720;
     text-decoration: none;
     color: #fff;
     padding: 8px;
-    border-radius: 20px;
+    border-radius: 15px;
     cursor: pointer;
     margin-left: 25px;
     opacity: 0;
@@ -520,15 +541,19 @@ body {
     height: 480px;
   }
   
-  
+  .producto .imagen img{
+    top: -20px;
+  }
+
   .producto:hover {
+    border-radius: 15px;
     position: relative;
-    top: -10px;
+    top: 40px;
     left: 5px;
-    -webkit-box-shadow: 0px 0px 14px -1px rgba(0, 0, 0, 0.192);
-    -moz-box-shadow: 0px 0px 14px -1px rgba(0, 0, 0, 0.192);
-    box-shadow: 0px 0px 14px -1px rgba(0, 0, 0, 0.192);
-    height: 470px;
+    -webkit-box-shadow: 14px 14px 14px -1px rgba(0, 0, 0, 0.192);
+    -moz-box-shadow: 14px 0px 14px -1px rgba(0, 0, 0, 0.192);
+    box-shadow: 0px 0px 14px 5px rgba(0, 0, 0, 0.192);
+    height: 480px;
   }
   
   .producto:hover .agregar {
@@ -542,7 +567,7 @@ body {
   }
   
   .listaCuenta {
-    border-radius: 2px;
+    border-radius: 8px;
     position: absolute;
     display: none;
     list-style: none;
@@ -561,10 +586,16 @@ body {
     padding: 15px 15px 15px 15px;
     text-align: left;
     margin-left: 20px;
+    width: 100%;
+  }
+  .listaCuenta li a:hover{
+    background: #c5c5c580;
+    width: 120%;
+    margin-left: -17px;
   }
   
   #bordeN {
-    margin: 7px 18px 0 -15px;
+    margin: -10px 18px 0 -15px;
   }
   
   .borde {
@@ -669,7 +700,7 @@ body {
   .totalCarro p {
     font-size: 16px;
     margin: 7px 25px 15px -2px;
-    color: #5ccb5f;
+    color: #55c720;
   }
   
   .totalCarro p span {
@@ -677,7 +708,7 @@ body {
   }
   
   .alerta {
-    color: #5ccb5f;
+    color: #55c720;
     font-size: 14px;
     margin: 10px 0 20px -175px;
   }
@@ -823,7 +854,7 @@ body {
   }
   
   .contenedor_modal .contenido_modal .derecha_modal .informacion_modal .precio_modal {
-    color: #5ccb5f;
+    color: #55c720;
   }
   
   .contenedor_modal .contenido_modal .derecha_modal .informacion_modal .sale_modal {
@@ -849,7 +880,7 @@ body {
   .contenedor_modal .contenido_modal .derecha_modal .pie_modal a {
     margin-right: 20px;
     padding: 8px;
-    background: #5ccb5f;
+    background: #55c720;
     text-decoration: none;
     color: #f2f2f2;
     border-radius: 20px;
@@ -861,6 +892,6 @@ body {
   
   .contenedor_modal .contenido_modal .derecha_modal .pie_modal input {
     text-align: center;
-    color: #5ccb5f;
+    color: #55c720;
     cursor: pointer;
   }
