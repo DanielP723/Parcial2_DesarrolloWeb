@@ -16,3 +16,7 @@ connection.connect(function(error){
 });
 
 connection.end();
+
+/* 
+    INSERT INTO `carrito` (`id`, `producto`, `cantidad`, `usuario`) VALUES ('0', 'nombre prueba', '2', 'usuarioprueba@prueba.com');
+*/
