@@ -17,8 +17,7 @@ export class IndexController {
 
     config = async () => {
         await this.model.saveProducts();
-        this.view.showProducts(this.model.products, 1);
-        this.view.pagination(this.model.pages, this.model.currentPage);
+        this.showProducts();
         this.view.setFilterPrice(this.model.maxPrice);
         this.addMethodFilterPrice(this.view.filterElements);
         this.addMethodsPaginationBar(this.view.paginationBar);
@@ -107,8 +106,25 @@ export class IndexController {
         }
     }
 
+    addMethodFavorites() {
+        for (let i = 0; i < this.view.ids.length; i++) {
+            let temp : any;
+            temp = this.view.getElement('corazon'+this.view.ids[i]);
+            if (temp) {
+                let id = this.view.ids[i];
+                temp.addEventListener('click', () => this.addToFavorites(id));
+            }
+        }
+    }
+
+    addToFavorites(id: number) {
+        console.log(id);
+    }
+
     showProducts() {
         this.view.showProducts(this.model.products, 1);
         this.view.pagination(this.model.pages, this.model.currentPage);
+        this.addMethodFavorites();
     }
+
 }

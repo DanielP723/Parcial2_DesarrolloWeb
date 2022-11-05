@@ -5,10 +5,13 @@ export class IndexView {
     public paginationBar: any;
     // List of elements necessary to search. Index 0 is the button, Index 1 the browser
     public searchElements: any;
-    public elements: any;
-    // List of elemnts necessary to filter. 0 → lblMinPrice, 1 → lblMaxPrice, 2 → bntFilter, 3 → RangeMin,
+    // List of elements necessary to filter. 0 → lblMinPrice, 1 → lblMaxPrice, 2 → bntFilter, 3 → RangeMin,
     //  4 → RangeMax, 5 → RangeInput, 6 → Range(View the progress), 7 → PriceGap
     public filterElements: any;
+    // List of ids of products on the view
+    public ids: any;
+    // Heart icons list for add to favorites
+    public hearts: any;
 
     constructor() {
         this.container = this.getElement('container');
@@ -22,9 +25,11 @@ export class IndexView {
         this.getElement('filtrarPrecio'), this.getElement('range_min'), this.getElement('range_max'),
         document.querySelectorAll(".range-input input"), document.querySelector(".slider .progress"), 5];
         this.logo = this.getElement('imgLogo');
+        this.ids = [];
+        this.hearts = [];
     }
 
-    private getElement = (selector: string): HTMLElement | null => document.getElementById(selector);
+    public getElement = (selector: string): HTMLElement | null => document.getElementById(selector);
 
     showProducts(products: any, page: number) {
         if(products.length == 0){
@@ -41,8 +46,9 @@ export class IndexView {
             html += "<div class='row py-3'>";
             for (let j = 0; j < 4; j++) {
                 html += "<div class='col-3 producto'>" + //onmouseover='nombreCompleto("+productos[index][0]+")' onmouseout='nombreCorto("+productos[index][0]+")
-                    "     <div class='imagen my-3' id='corazon" + products[index].ID + "' >";
-                html += "<i class='fa-regular fa-heart'></i>";
+                    "     <div class='imagen my-3'>";
+                html += "<i class='fa-regular fa-heart' id='corazon" + products[index].ID + "'></i>";
+                this.ids.push(products[index].ID);
                 html += "<img  src='" + products[index].image + "'alt='product" + String(index + 1) + "'>" +
                     "     </div>" +
                     "    <div class='descripcion'> ";
