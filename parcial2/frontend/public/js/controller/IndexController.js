@@ -17,6 +17,11 @@ export class IndexController {
             this.addMethodsPaginationBar(this.view.paginationBar);
             this.addMethodSearch();
         });
+        this.addToFavorites = (id) => __awaiter(this, void 0, void 0, function* () {
+            if (id && id > 0 && id <= this.model.products.length) {
+                yield this.model.addToFavorites(id);
+            }
+        });
         this.view = view;
         this.model = model;
         this.config();
@@ -110,9 +115,6 @@ export class IndexController {
                 temp.addEventListener('click', () => this.addToFavorites(id));
             }
         }
-    }
-    addToFavorites(id) {
-        console.log(id);
     }
     showProducts() {
         this.view.showProducts(this.model.products, this.model.currentPage);

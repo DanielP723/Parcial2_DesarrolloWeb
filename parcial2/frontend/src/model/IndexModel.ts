@@ -71,4 +71,22 @@ export class IndexModel {
             .then(() => this.currentPage = 1)
             .catch(err => console.log(err));
     }
+
+    addToFavorites = async (id: number) => {
+        await fetch(`${this.URI}api/addFavorites`, {
+            method: 'POST',
+            body: JSON.stringify({ id: id, email: 'prueba@gmail.com' }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    console.log(data.message)
+                }else{
+                    console.log('Registro exitoso');
+                }
+            })
+    }
 }

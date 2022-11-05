@@ -114,8 +114,10 @@ export class IndexController {
         }
     }
 
-    addToFavorites(id: number) {
-        console.log(id);
+    addToFavorites = async (id: number)  => {
+        if(id && id>0 && id<=this.model.products.length){
+            await this.model.addToFavorites(id);
+        }
     }
 
     showProducts() {

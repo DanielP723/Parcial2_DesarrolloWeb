@@ -59,6 +59,24 @@ export class IndexModel {
                 .then(() => this.currentPage = 1)
                 .catch(err => console.log(err));
         });
+        this.addToFavorites = (id) => __awaiter(this, void 0, void 0, function* () {
+            yield fetch(`${this.URI}api/addFavorites`, {
+                method: 'POST',
+                body: JSON.stringify({ id: id, email: 'prueba@gmail.com' }),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                if (data.error) {
+                    console.log(data.message);
+                }
+                else {
+                    console.log('Registro exitoso');
+                }
+            });
+        });
         this.pages = 0;
         this.currentPage = 0;
         this.maxPrice = 0;
