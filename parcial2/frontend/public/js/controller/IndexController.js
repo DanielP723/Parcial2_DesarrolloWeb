@@ -84,22 +84,19 @@ export class IndexController {
             if (i < 5) {
                 if (page != this.model.currentPage) {
                     this.model.currentPage = page;
-                    this.view.showProducts(this.model.products, page);
-                    this.view.pagination(this.model.pages, this.model.currentPage);
+                    this.showProducts();
                 }
             }
             else if (i == 6) {
                 if (this.model.currentPage + 1 <= this.model.pages) {
                     this.model.currentPage++;
-                    this.view.showProducts(this.model.products, this.model.currentPage);
-                    this.view.pagination(this.model.pages, this.model.currentPage);
+                    this.showProducts();
                 }
             }
             else {
                 if (this.model.currentPage - 1 > 0) {
                     this.model.currentPage--;
-                    this.view.showProducts(this.model.products, this.model.currentPage);
-                    this.view.pagination(this.model.pages, this.model.currentPage);
+                    this.showProducts();
                 }
             }
         }
@@ -118,7 +115,7 @@ export class IndexController {
         console.log(id);
     }
     showProducts() {
-        this.view.showProducts(this.model.products, 1);
+        this.view.showProducts(this.model.products, this.model.currentPage);
         this.view.pagination(this.model.pages, this.model.currentPage);
         this.addMethodFavorites();
     }

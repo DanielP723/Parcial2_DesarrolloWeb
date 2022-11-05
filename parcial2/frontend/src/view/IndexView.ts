@@ -32,6 +32,7 @@ export class IndexView {
     public getElement = (selector: string): HTMLElement | null => document.getElementById(selector);
 
     showProducts(products: any, page: number) {
+        this.ids = [];
         if(products.length == 0){
             this.container.innerHTML = '';
             return;

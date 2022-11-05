@@ -16,6 +16,7 @@ export class IndexView {
         this.hearts = [];
     }
     showProducts(products, page) {
+        this.ids = [];
         if (products.length == 0) {
             this.container.innerHTML = '';
             return;
