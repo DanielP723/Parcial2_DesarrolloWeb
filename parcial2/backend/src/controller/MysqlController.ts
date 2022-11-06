@@ -12,18 +12,28 @@ export default class MysqlController {
     }
 
     public addUser = (req: Request, res: Response) => {
-        const {email, password, name, surname} = req.body;
-        if(email && password && name && surname){
-            this.model.addUser(email, password, name, surname, (error: any, rows: any) => {
-                if(error){
+        const { email, password, name, surname } = req.body;
+        if (email && password && name && surname) {
+            this.model.searchUser(email, (error: any, rows: any) => {
+                if (error) {
                     console.error(error);
                     return res.json({ error: true, message: 'e101' });
                 }
-                if(rows){
-                    return res.json(rows);
+                if (rows.length > 0) {
+                    return res.json({ error: true, message: 'e103' });
+                } else {
+                    this.model.addUser(email, password, name, surname, (error: any, rows: any) => {
+                        if (error) {
+                            console.error(error);
+                            return res.json({ error: true, message: 'e101' });
+                        }
+                        if (rows) {
+                            return res.json(rows);
+                        }
+                    });
                 }
             });
-        }else{
+        } else {
             res.json({ error: true, message: 'e101' });
         }
     }
@@ -31,57 +41,57 @@ export default class MysqlController {
     public searchFavorites = (req: Request, res: Response) => {
         const id = parseInt(req.body.id);
         const email = req.body.email;
-        if(id && email){
+        if (id && email) {
             this.model.searchFavorites(id, email, (error: any, rows: any) => {
-                if(error){
+                if (error) {
                     console.error(error);
                     return res.json({ 'error': true, message: 'e101' });
                 }
-                if(rows.length > 0){
+                if (rows.length > 0) {
                     let rows2: any = this.deleteFavorites(id, email, res);
-                    if(rows2){
-                        return res.json([{'error': false, message: 'Delete favorites success'}]);
+                    if (rows2) {
+                        return res.json([{ 'error': false, message: 'Delete favorites success' }]);
                     }
                 } else {
                     let rows2: any = this.addFavorites(id, email, res);
-                    if(rows2){
-                        return res.json([{'error': false, message: 'Add favorites success'}]);
+                    if (rows2) {
+                        return res.json([{ 'error': false, message: 'Add favorites success' }]);
                     }
                 }
             });
-        }else{
+        } else {
             return res.json({ 'error': true, message: 'e101' });
         }
     }
 
     public deleteFavorites = (id: number, email: string, res: Response) => {
-        if(id && email){
+        if (id && email) {
             this.model.deleteFavorites(id, email, (error: any, rows: any) => {
-                if(error){
+                if (error) {
                     console.error(error);
                     return res.json({ error: true, message: 'e101' });
                 }
-                if(rows){
+                if (rows) {
                     return res.json(rows);
                 }
             });
-        }else{
+        } else {
             res.json({ error: true, message: 'e101' });
         }
     }
 
     public addFavorites = (id: number, email: string, res: Response) => {
-        if(id && email){
+        if (id && email) {
             this.model.addFavorites(id, email, (error: any, rows: any) => {
-                if(error){
+                if (error) {
                     console.error(error);
                     return res.json({ error: true, message: 'e101' });
                 }
-                if(rows){
+                if (rows) {
                     return res.json(rows);
                 }
             });
-        }else{
+        } else {
             res.json({ error: true, message: 'e101' });
         }
     }
@@ -91,7 +101,7 @@ export default class MysqlController {
             if (error) {
                 console.error(error);
                 return response.json({ error: true, message: 'e101' });
-            }            
+            }
             if (rows) {
                 return response.json(rows);
             } else {
@@ -99,7 +109,7 @@ export default class MysqlController {
             }
         });
     }
-    
+
     public getMovie = (request: Request, response: Response) => {
         const id = parseInt(request.params.id);
         if (id) {
@@ -107,7 +117,7 @@ export default class MysqlController {
                 if (error) {
                     console.error(error);
                     return response.json({ error: true, message: 'e101' });
-                }            
+                }
                 if (rows) {
                     return response.json(rows);
                 } else {
@@ -116,19 +126,19 @@ export default class MysqlController {
             });
         } else {
             return response.status(404).json({ error: false, message: 'Movie not found' });
-        }        
+        }
     }
 
     public updateTitleMovie = (request: Request, response: Response) => {
-        if(request.body.data) {
-            this.moviesModel.updateTitleMovie({id: parseInt(request.body.data.id), title: request.body.data.title}, (error: any, rows: any) => {
+        if (request.body.data) {
+            this.moviesModel.updateTitleMovie({ id: parseInt(request.body.data.id), title: request.body.data.title }, (error: any, rows: any) => {
                 if (error) {
                     console.error(error);
                     return response.json({ error: true, message: 'e201' });
                 } else {
                     return response.json({ error: false, message: 'Title update' });
                 }
-            });   
+            });
         } else {
             return response.status(404).json({ error: false, message: 'Movie not found' });
         }

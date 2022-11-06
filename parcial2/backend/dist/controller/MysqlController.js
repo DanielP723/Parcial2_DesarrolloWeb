@@ -9,13 +9,24 @@ class MysqlController {
         this.addUser = (req, res) => {
             const { email, password, name, surname } = req.body;
             if (email && password && name && surname) {
-                this.model.addUser(email, password, name, surname, (error, rows) => {
+                this.model.searchUser(email, (error, rows) => {
                     if (error) {
                         console.error(error);
                         return res.json({ error: true, message: 'e101' });
                     }
-                    if (rows) {
-                        return res.json(rows);
+                    if (rows.length > 0) {
+                        return res.json({ error: true, message: 'e103' });
+                    }
+                    else {
+                        this.model.addUser(email, password, name, surname, (error, rows) => {
+                            if (error) {
+                                console.error(error);
+                                return res.json({ error: true, message: 'e101' });
+                            }
+                            if (rows) {
+                                return res.json(rows);
+                            }
+                        });
                     }
                 });
             }

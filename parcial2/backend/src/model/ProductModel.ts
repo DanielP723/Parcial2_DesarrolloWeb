@@ -21,7 +21,6 @@ class ProductModel{
     }
 
     public filterPriceProducts = async (min: number, max: number, fn: Function) => {
-        console.log(min);console.log(max);
         this.MongoDBC.connection();
         const products = await this.MongoDBC.ProductSchema.find({price: {$gte: min, $lte: max}});
         fn(products);

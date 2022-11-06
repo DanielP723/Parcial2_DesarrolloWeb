@@ -17,8 +17,11 @@ export class IndexController {
             this.addMethodsPaginationBar(this.view.paginationBar);
             this.addMethodSearch();
         });
+        /*
+        Se debe verificar que esté logueado por medio del token para poder añadir a favoritos
+        */
         this.addToFavorites = (id) => __awaiter(this, void 0, void 0, function* () {
-            if (id && id > 0 && id <= this.model.products.length) {
+            if (id && id > 0 && id <= this.model.lengthAllProducts) {
                 let response = yield this.model.addToFavorites(id);
                 if (response) {
                     let temp;

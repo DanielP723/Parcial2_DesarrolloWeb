@@ -10,6 +10,7 @@ class MysqlRoute {
         this.config = () => {
             this.router.post('/addUser', this.controller.addUser);
             this.router.post('/searchFavorites', this.controller.searchFavorites);
+            this.router.post('/addUser', this.controller.addUser);
         };
         this.router = (0, express_1.Router)();
         this.controller = new MysqlController_1.default();

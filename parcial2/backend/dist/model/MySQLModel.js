@@ -42,7 +42,14 @@ class MysqlModel {
     }
     addUser(email, password, name, surname, fn) {
         this.mysqlDBC.connection();
-        const statament = this.mysqlDBC.statement('INSERT INTO ??(??, ??, ??, ??) VALUES (??, ??, ??, ??)', ['users', 'email', 'name', 'surname', 'password', email, name, surname, password]);
+        const statament = this.mysqlDBC.statement(`INSERT INTO ??(??, ??, ??, ??) VALUES ('${email}', '${name}', '${surname}', '${password}')`, ['users', 'email', 'name', 'surname', 'password']);
+        this.mysqlDBC.pool.query(statament, (error, rows) => {
+            fn(error, rows);
+        });
+    }
+    searchUser(email, fn) {
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`SELECT * FROM ?? WHERE ?? LIKE '${email}';`, ['users', 'email']);
         this.mysqlDBC.pool.query(statament, (error, rows) => {
             fn(error, rows);
         });

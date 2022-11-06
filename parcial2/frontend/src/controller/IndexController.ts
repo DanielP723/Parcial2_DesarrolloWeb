@@ -114,8 +114,11 @@ export class IndexController {
         }
     }
 
+    /*
+    Se debe verificar que esté logueado por medio del token para poder añadir a favoritos
+    */
     addToFavorites = async (id: number) => {
-        if (id && id > 0 && id <= this.model.products.length) {
+        if (id && id > 0 && id <= this.model.lengthAllProducts) {
             let response: any = await this.model.addToFavorites(id);
             if (response) {
                 let temp: any;

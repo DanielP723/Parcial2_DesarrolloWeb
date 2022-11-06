@@ -20,6 +20,7 @@ export class IndexModel {
             })
                 .then(() => this.pages = Math.ceil(this.products.length / 12))
                 .then(() => this.currentPage = 1)
+                .then(() => this.lengthAllProducts = this.products.length)
                 .then(() => this.getMax(this.products))
                 .catch(err => console.log(err));
         });
@@ -67,14 +68,13 @@ export class IndexModel {
                     "Content-type": "application/json"
                 }
             });
-            // .then(res => res.json())
-            // .catch(err => console.log(err));
             let res = yield response.json();
             return res;
         });
         this.pages = 0;
         this.currentPage = 0;
         this.maxPrice = 0;
+        this.lengthAllProducts = 0;
     }
     getMax(products) {
         let productsCopy = products.slice();

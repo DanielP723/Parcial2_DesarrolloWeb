@@ -10,8 +10,17 @@ export default class MysqlModel {
 
     public addUser(email: string, password: string, name: string, surname: string, fn: Function){
         this.mysqlDBC.connection();
-        const statament = this.mysqlDBC.statement('INSERT INTO ??(??, ??, ??, ??) VALUES (??, ??, ??, ??)', 
-        ['users', 'email', 'name', 'surname', 'password', email, name, surname, password]);
+        const statament = this.mysqlDBC.statement(`INSERT INTO ??(??, ??, ??, ??) VALUES ('${email}', '${name}', '${surname}', '${password}')`, 
+        ['users', 'email', 'name', 'surname', 'password']);
+        this.mysqlDBC.pool.query(statament, (error: any, rows: any) => {
+            fn(error, rows);
+        });
+    }
+
+    public searchUser(email: string, fn: Function){
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`SELECT * FROM ?? WHERE ?? LIKE '${email}';`, 
+        ['users', 'email']);
         this.mysqlDBC.pool.query(statament, (error: any, rows: any) => {
             fn(error, rows);
         });
