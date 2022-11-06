@@ -105,8 +105,8 @@ export class IndexController {
 
     addMethodFavorites() {
         for (let i = 0; i < this.view.ids.length; i++) {
-            let temp : any;
-            temp = this.view.getElement('corazon'+this.view.ids[i]);
+            let temp: any;
+            temp = this.view.getElement('corazon' + this.view.ids[i]);
             if (temp) {
                 let id = this.view.ids[i];
                 temp.addEventListener('click', () => this.addToFavorites(id));
@@ -114,9 +114,20 @@ export class IndexController {
         }
     }
 
-    addToFavorites = async (id: number)  => {
-        if(id && id>0 && id<=this.model.products.length){
-            await this.model.addToFavorites(id);
+    addToFavorites = async (id: number) => {
+        if (id && id > 0 && id <= this.model.products.length) {
+            let response: any = await this.model.addToFavorites(id);
+            if (response) {
+                let temp: any;
+                temp = this.view.getElement('corazon' + id);
+                if (response.insertId != 0) {
+                    temp.classList.add('fa-solid');
+                    temp.classList.remove('fa-regular');
+                } else {
+                    temp.classList.remove('fa-solid');
+                    temp.classList.add('fa-regular');
+                }
+            }
         }
     }
 

@@ -14,8 +14,7 @@ class MysqlRoute{
 
     private config = () => {
         this.router.post('/addUser', this.controller.addUser);
-        this.router.post('/addFavorites', this.controller.addFavorites);
-        // this.router.post('/filter', this.controller.filterPriceProducts);
+        this.router.post('/searchFavorites', this.controller.searchFavorites);
     }
 }
 

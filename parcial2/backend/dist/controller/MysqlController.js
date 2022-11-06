@@ -23,9 +23,50 @@ class MysqlController {
                 res.json({ error: true, message: 'e101' });
             }
         };
-        this.addFavorites = (req, res) => {
+        this.searchFavorites = (req, res) => {
             const id = parseInt(req.body.id);
             const email = req.body.email;
+            if (id && email) {
+                this.model.searchFavorites(id, email, (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        return res.json({ 'error': true, message: 'e101' });
+                    }
+                    if (rows.length > 0) {
+                        let rows2 = this.deleteFavorites(id, email, res);
+                        if (rows2) {
+                            return res.json([{ 'error': false, message: 'Delete favorites success' }]);
+                        }
+                    }
+                    else {
+                        let rows2 = this.addFavorites(id, email, res);
+                        if (rows2) {
+                            return res.json([{ 'error': false, message: 'Add favorites success' }]);
+                        }
+                    }
+                });
+            }
+            else {
+                return res.json({ 'error': true, message: 'e101' });
+            }
+        };
+        this.deleteFavorites = (id, email, res) => {
+            if (id && email) {
+                this.model.deleteFavorites(id, email, (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        return res.json({ error: true, message: 'e101' });
+                    }
+                    if (rows) {
+                        return res.json(rows);
+                    }
+                });
+            }
+            else {
+                res.json({ error: true, message: 'e101' });
+            }
+        };
+        this.addFavorites = (id, email, res) => {
             if (id && email) {
                 this.model.addFavorites(id, email, (error, rows) => {
                     if (error) {

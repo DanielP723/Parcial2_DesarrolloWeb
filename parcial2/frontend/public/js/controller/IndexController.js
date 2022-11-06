@@ -19,7 +19,19 @@ export class IndexController {
         });
         this.addToFavorites = (id) => __awaiter(this, void 0, void 0, function* () {
             if (id && id > 0 && id <= this.model.products.length) {
-                yield this.model.addToFavorites(id);
+                let response = yield this.model.addToFavorites(id);
+                if (response) {
+                    let temp;
+                    temp = this.view.getElement('corazon' + id);
+                    if (response.insertId != 0) {
+                        temp.classList.add('fa-solid');
+                        temp.classList.remove('fa-regular');
+                    }
+                    else {
+                        temp.classList.remove('fa-solid');
+                        temp.classList.add('fa-regular');
+                    }
+                }
             }
         });
         this.view = view;

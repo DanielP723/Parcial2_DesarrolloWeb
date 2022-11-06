@@ -17,6 +17,24 @@ export default class MysqlModel {
         });
     }
 
+    public searchFavorites(id: number, email: string, fn: Function){
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`SELECT * FROM ?? WHERE ??  = ${id} AND ?? LIKE '${email}';`, 
+        ['favorites', 'id_product', 'email_user']);
+        this.mysqlDBC.pool.query(statament, (error: any, rows: any) => {
+            fn(error, rows);
+        });
+    }
+
+    public deleteFavorites(id: number, email: string, fn: Function){
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`DELETE FROM ?? WHERE ?? = ${id} AND ?? LIKE '${email}';`, 
+        ['favorites', 'id_product', 'email_user']);
+        this.mysqlDBC.pool.query(statament, (error: any, rows: any) => {
+            fn(error, rows);
+        });
+    }
+
     public addFavorites(id: number, email: string, fn: Function){
         this.mysqlDBC.connection();
         const statament = this.mysqlDBC.statement(`INSERT INTO ??(??, ??) VALUES (${id}, '${email}');`, 

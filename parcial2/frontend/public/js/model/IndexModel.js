@@ -60,22 +60,17 @@ export class IndexModel {
                 .catch(err => console.log(err));
         });
         this.addToFavorites = (id) => __awaiter(this, void 0, void 0, function* () {
-            yield fetch(`${this.URI}api/addFavorites`, {
+            let response = yield fetch(`${this.URI}api/searchFavorites`, {
                 method: 'POST',
                 body: JSON.stringify({ id: id, email: 'prueba@gmail.com' }),
                 headers: {
                     "Content-type": "application/json"
                 }
-            })
-                .then(res => res.json())
-                .then(data => {
-                if (data.error) {
-                    console.log(data.message);
-                }
-                else {
-                    console.log('Registro exitoso');
-                }
             });
+            // .then(res => res.json())
+            // .catch(err => console.log(err));
+            let res = yield response.json();
+            return res;
         });
         this.pages = 0;
         this.currentPage = 0;
