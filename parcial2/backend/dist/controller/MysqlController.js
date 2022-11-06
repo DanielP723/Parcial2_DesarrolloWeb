@@ -93,6 +93,27 @@ class MysqlController {
                 res.json({ error: true, message: 'e101' });
             }
         };
+        this.signIn = (req, res) => {
+            const { email, password, name, surname } = req.body;
+            if (email && password) {
+                this.model.searchUser(email, (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        return res.json({ error: true, message: 'e101' });
+                    }
+                    if (rows.length > 0) {
+                        return res.json({ error: true, message: 'e103' });
+                    }
+                    else {
+                        console.log(email);
+                        console.log(password);
+                    }
+                });
+            }
+            else {
+                res.json({ error: true, message: 'e101' });
+            }
+        };
         this.getMovies = (request, response) => {
             this.moviesModel.getMovies(this.moviesModel.limit(parseInt(request.params.page), 10), (error, rows) => {
                 if (error) {

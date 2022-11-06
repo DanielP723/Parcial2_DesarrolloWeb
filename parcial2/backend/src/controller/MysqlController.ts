@@ -37,6 +37,7 @@ export default class MysqlController {
             res.json({ error: true, message: 'e101' });
         }
     }
+    
 
     public searchFavorites = (req: Request, res: Response) => {
         const id = parseInt(req.body.id);
@@ -89,6 +90,26 @@ export default class MysqlController {
                 }
                 if (rows) {
                     return res.json(rows);
+                }
+            });
+        } else {
+            res.json({ error: true, message: 'e101' });
+        }
+    }
+
+    public signIn = (req: Request, res: Response) => {
+        const { email, password, name, surname } = req.body;
+        if (email && password) {
+            this.model.searchUser(email, (error: any, rows: any) => {
+                if (error) {
+                    console.error(error);
+                    return res.json({ error: true, message: 'e101' });
+                }
+                if (rows.length > 0) {
+                    return res.json({ error: true, message: 'e103' });
+                } else {
+                    console.log(email);
+                    console.log(password);
                 }
             });
         } else {
