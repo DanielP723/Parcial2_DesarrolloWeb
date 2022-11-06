@@ -94,7 +94,7 @@ class MysqlController {
             }
         };
         this.signIn = (req, res) => {
-            const { email, password, name, surname } = req.body;
+            const { email, password } = req.body;
             if (email && password) {
                 this.model.searchUser(email, (error, rows) => {
                     if (error) {

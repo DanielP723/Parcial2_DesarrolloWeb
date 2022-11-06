@@ -98,7 +98,7 @@ export default class MysqlController {
     }
 
     public signIn = (req: Request, res: Response) => {
-        const { email, password, name, surname } = req.body;
+        const { email, password } = req.body;
         if (email && password) {
             this.model.searchUser(email, (error: any, rows: any) => {
                 if (error) {
