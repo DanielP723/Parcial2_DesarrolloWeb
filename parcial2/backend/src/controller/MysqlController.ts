@@ -106,10 +106,9 @@ export default class MysqlController {
                     return res.json({ error: true, message: 'e101' });
                 }
                 if (rows.length > 0) {
-                    return res.json({ error: true, message: 'e103' });
-                } else {
                     console.log(email);
                     console.log(password);
+                    //return res.json({ error: true, message: 'e103' });
                 }
             });
         } else {
