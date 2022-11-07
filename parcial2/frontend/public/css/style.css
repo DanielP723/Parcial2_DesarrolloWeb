@@ -369,6 +369,12 @@ body {
   #btnAcceder {
     width: 150px;
     margin-left: 30px;
+    cursor: pointer;
+  }
+  #btnAcceder:hover {
+    width: 150px;
+    margin-left: 30px;
+    background: #efa229;
   }
   
   #accederNormal {
