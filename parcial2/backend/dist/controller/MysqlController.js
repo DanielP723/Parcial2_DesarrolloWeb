@@ -4,6 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const MysqlModel_1 = __importDefault(require("../model/MysqlModel"));
+const jwt = require('jsonwebtoken'); //importando la libreria para generar token
+const TOKEN_KEY = "x4TvErxRETbVcqaLl5dqMI115eN1p5y"; //llave para poder generar el token
 class MysqlController {
     constructor() {
         this.addUser = (req, res) => {
@@ -93,6 +95,20 @@ class MysqlController {
                 res.json({ error: true, message: 'e101' });
             }
         };
+        // SE VERIFICA EL TOKEN
+        this.verificarToken = (req, res, next) => {
+            const authHeader = req.headers['authorization'];
+            const token = authHeader && authHeader.split('')[1];
+            console.log(authHeader);
+            if (token == null)
+                return res.status(401).send("Token requerido");
+            jwt.verify(token, TOKEN_KEY, (err, user) => {
+                if (err)
+                    return res.status(403).send("Token invalido");
+                req.user = user;
+                next();
+            });
+        };
         this.signIn = (req, res) => {
             const { email, password } = req.body;
             if (email && password) {
@@ -110,6 +126,8 @@ class MysqlController {
                         console.log('Usuario no encontrado');
                     }
                 });
+                //SE GENERA EL TOKEN DEL USUARIO (se coloca en la parte que se se realice la validacion del login)
+                const token = jwt.sign({ userId: email, password: password }, TOKEN_KEY, { expiresIn: "2h" });
             }
             else {
                 res.json({ error: true, message: 'e101' });
