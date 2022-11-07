@@ -109,6 +109,8 @@ export default class MysqlController {
                     console.log(email);
                     console.log(password);
                     //return res.json({ error: true, message: 'e103' });
+                }else{
+                    console.log('Usuario no encontrado');
                 }
             });
         } else {
