@@ -14,6 +14,7 @@ export class IndexView {
         this.logo = this.getElement('imgLogo');
         this.ids = [];
         this.hearts = [];
+        this.btnFavorites = this.getElement('btnMisFavoritos');
     }
     showProducts(products, page) {
         this.ids = [];

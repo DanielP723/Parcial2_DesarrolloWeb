@@ -12,6 +12,7 @@ export class IndexView {
     public ids: any;
     // Heart icons list for add to favorites
     public hearts: any;
+    public btnFavorites: any;
 
     constructor() {
         this.container = this.getElement('container');
@@ -27,6 +28,7 @@ export class IndexView {
         this.logo = this.getElement('imgLogo');
         this.ids = [];
         this.hearts = [];
+        this.btnFavorites = this.getElement('btnMisFavoritos');
     }
 
     public getElement = (selector: string): HTMLElement | null => document.getElementById(selector);

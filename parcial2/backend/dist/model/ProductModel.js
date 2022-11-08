@@ -30,6 +30,12 @@ class ProductModel {
             const products = yield this.MongoDBC.ProductSchema.find({ price: { $gte: min, $lte: max } });
             fn(products);
         });
+        this.showFavorites = (ids, fn) => __awaiter(this, void 0, void 0, function* () {
+            this.MongoDBC.connection();
+            let allIds = ids.map((x) => x.id_product);
+            const products = yield this.MongoDBC.ProductSchema.find({ ID: { $in: allIds } });
+            fn(products);
+        });
         this.MongoDBC = new MongoDBC_1.default();
     }
 }

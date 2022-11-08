@@ -22,6 +22,21 @@ export class IndexController {
         this.addMethodFilterPrice(this.view.filterElements);
         this.addMethodsPaginationBar(this.view.paginationBar);
         this.addMethodSearch();
+        this.addMethodShowFavorites();
+    }
+
+    addMethodShowFavorites() {
+        this.view.btnFavorites.addEventListener('click', async () => {
+            let email = localStorage.getItem('token');
+            if(email && email.length > 0){
+                let rows: any;
+                await this.model.getFavoritesId(email).then(datos => rows = datos);
+                if(rows && rows.length > 0){
+                    await this.model.showFavorites(rows);
+                    this.showProducts();
+                }
+            }
+        })
     }
 
     addMethodFilterPrice(filterElements: any) {
@@ -114,9 +129,6 @@ export class IndexController {
         }
     }
 
-    /*
-    Se debe verificar que esté logueado por medio del token para poder añadir a favoritos
-    */
     addToFavorites = async (id: number) => {
         if (id && id > 0 && id <= this.model.lengthAllProducts) {
             let email = localStorage.getItem('token');

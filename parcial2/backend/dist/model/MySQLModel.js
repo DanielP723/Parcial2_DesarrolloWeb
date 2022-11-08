@@ -33,6 +33,13 @@ class MysqlModel {
             fn(error, rows);
         });
     }
+    showFavorites(email, fn) {
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`SELECT * FROM ?? WHERE ??  LIKE '${email}';`, ['favorites', 'email_user']);
+        this.mysqlDBC.pool.query(statament, (error, rows) => {
+            fn(error, rows);
+        });
+    }
     searchFavorites(id, email, fn) {
         this.mysqlDBC.connection();
         const statament = this.mysqlDBC.statement(`SELECT * FROM ?? WHERE ??  = ${id} AND ?? LIKE '${email}';`, ['favorites', 'id_product', 'email_user']);

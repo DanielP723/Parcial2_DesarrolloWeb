@@ -80,12 +80,43 @@ export class IndexModel {
     addToFavorites = async (id: number, token: string) => {
         let response = await fetch(`${this.URI}api/searchFavorites`, {
             method: 'POST',
-            body: JSON.stringify({ id: id, token: token}),
+            body: JSON.stringify({ id: id, token: token }),
             headers: {
                 "Content-type": "application/json"
             }
         });
         let res = await response.json();
         return res;
+    }
+
+    getFavoritesId = async (token: any) => {
+        let response = await fetch(`${this.URI}api/showFavorites`, {
+            method: 'POST',
+            body: JSON.stringify({ token: token }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        });
+        let res = response.json();
+        return res;
+    }
+
+    showFavorites = async (ids: any) => {
+        await fetch(`${this.URI}api/getFavorites`, {
+            method: 'POST',
+            body: JSON.stringify({ ids: ids }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if(data != NaN && data != null){
+                    this.products = data;
+                }
+            })
+            .then(() => this.pages = Math.ceil(this.products.length / 12))
+            .then(() => this.currentPage = 1)
+            .catch(err => console.log(err));
     }
 }

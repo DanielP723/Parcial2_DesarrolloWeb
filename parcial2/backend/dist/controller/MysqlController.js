@@ -37,6 +37,28 @@ class MysqlController {
                 res.json({ error: true, message: 'e101' });
             }
         };
+        this.showFavorites = (req, res) => {
+            const token = req.body.token;
+            if (token) {
+                let decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+                if (!decodedToken.email) {
+                    return res.json({ 'error': true, message: 'e104' });
+                }
+                this.model.showFavorites(decodedToken.email, (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        return res.json({ 'error': true, message: 'e101' });
+                    }
+                    if (rows) {
+                        return res.json(rows);
+                    }
+                });
+            }
+            else {
+                console.log('Token Inválido');
+                return res.json({ 'error': true, message: 'e104' });
+            }
+        };
         this.searchFavorites = (req, res) => {
             const id = parseInt(req.body.id);
             const token = req.body.token;
@@ -103,20 +125,6 @@ class MysqlController {
             else {
                 res.json({ error: true, message: 'e101' });
             }
-        };
-        // SE VERIFICA EL TOKEN
-        this.verificarToken = (req, res, next) => {
-            const authHeader = req.headers['authorization'];
-            const token = authHeader && authHeader.split('')[1];
-            console.log(authHeader);
-            if (token == null)
-                return res.status(401).send("Token requerido");
-            jwt.verify(token, process.env.TOKEN_KEY, (err, user) => {
-                if (err)
-                    return res.status(403).send("Token invalido");
-                // req.user = user;
-                next();
-            });
         };
         this.signIn = (req, res) => {
             const { email, password } = req.body;

@@ -25,6 +25,13 @@ class ProductModel{
         const products = await this.MongoDBC.ProductSchema.find({price: {$gte: min, $lte: max}});
         fn(products);
     }
+
+    public showFavorites = async (ids: any, fn: Function) => {
+        this.MongoDBC.connection();
+        let allIds = ids.map((x: { id_product: any; }) => x.id_product);
+        const products = await this.MongoDBC.ProductSchema.find({ID: {$in: allIds}});
+        fn(products);
+    }
 }
 
 export default ProductModel;

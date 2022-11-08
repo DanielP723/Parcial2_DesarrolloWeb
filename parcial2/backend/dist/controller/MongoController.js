@@ -21,6 +21,15 @@ class MongoController {
                 res.json(products);
             });
         };
+        this.showFavorites = (req, res) => {
+            let ids = req.body.ids;
+            if (ids && ids.length > 0) {
+                this.model.showFavorites(ids, (products) => {
+                    console.log(products);
+                    res.json(products);
+                });
+            }
+        };
         this.model = new ProductModel_1.default();
     }
 }

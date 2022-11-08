@@ -16,10 +16,8 @@ export class IndexController {
             this.addMethodFilterPrice(this.view.filterElements);
             this.addMethodsPaginationBar(this.view.paginationBar);
             this.addMethodSearch();
+            this.addMethodShowFavorites();
         });
-        /*
-        Se debe verificar que esté logueado por medio del token para poder añadir a favoritos
-        */
         this.addToFavorites = (id) => __awaiter(this, void 0, void 0, function* () {
             if (id && id > 0 && id <= this.model.lengthAllProducts) {
                 let email = localStorage.getItem('token');
@@ -46,6 +44,19 @@ export class IndexController {
         this.view.logo.addEventListener('click', () => {
             window.location.reload();
         });
+    }
+    addMethodShowFavorites() {
+        this.view.btnFavorites.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
+            let email = localStorage.getItem('token');
+            if (email && email.length > 0) {
+                let rows;
+                yield this.model.getFavoritesId(email).then(datos => rows = datos);
+                if (rows && rows.length > 0) {
+                    yield this.model.showFavorites(rows);
+                    this.showProducts();
+                }
+            }
+        }));
     }
     addMethodFilterPrice(filterElements) {
         // Handle changes slider
