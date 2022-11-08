@@ -41,7 +41,7 @@ export default class MysqlController {
             res.json({ error: true, message: 'e101' });
         }
     }
-    
+
 
     public searchFavorites = (req: Request, res: Response) => {
         const id = parseInt(req.body.id);
@@ -102,14 +102,14 @@ export default class MysqlController {
     }
 
     // SE VERIFICA EL TOKEN
-    public verificarToken = (req: Request, res: Response, next: NextFunction) =>{
+    public verificarToken = (req: Request, res: Response, next: NextFunction) => {
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split('')[1];
         console.log(authHeader);
-        if(token==null)
+        if (token == null)
             return res.status(401).send("Token requerido");
-        jwt.verify(token, TOKEN_KEY, (err:any, user:any) =>{
-            if(err) return res.status(403).send("Token invalido");
+        jwt.verify(token, TOKEN_KEY, (err: any, user: any) => {
+            if (err) return res.status(403).send("Token invalido");
             // req.user = user;
             next();
         })
@@ -124,22 +124,22 @@ export default class MysqlController {
                 }
                 if (rows.length == 1) {
                     let passwordEncrypt: any = rows[0].password;
-                    if(bcrypt.compareSync(password, passwordEncrypt)){
-                        return res.json({ error: false, message: 'Inicio de sesión exitoso' })
-                    }else{
+                    if (bcrypt.compareSync(password, passwordEncrypt)) {
+                        //SE GENERA EL TOKEN DEL USUARIO (se coloca en la parte que se se realice la validacion del login)
+                        const token = jwt.sign(
+                            { userId: email, password: password },
+                            TOKEN_KEY,
+                            { expiresIn: "2h" }
+                        );
+                        console.log(token);
+                        return res.header('authorization', token).json({ error: false, message: 'Inicio de sesión exitoso' });
+                    } else {
                         return res.json({ error: true, message: 'e102' });
                     }
-                }else{
+                } else {
                     return res.json({ error: true, message: 'e103' });
                 }
             });
-            //SE GENERA EL TOKEN DEL USUARIO (se coloca en la parte que se se realice la validacion del login)
-            const token = jwt.sign(
-                {userId: email, password: password},
-                TOKEN_KEY,
-                {expiresIn: "2h"}
-            );
-            
         } else {
             res.json({ error: true, message: 'e101' });
         }

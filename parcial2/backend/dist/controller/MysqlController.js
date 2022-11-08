@@ -121,7 +121,10 @@ class MysqlController {
                     if (rows.length == 1) {
                         let passwordEncrypt = rows[0].password;
                         if (bcryptjs_1.default.compareSync(password, passwordEncrypt)) {
-                            return res.json({ error: false, message: 'Inicio de sesión exitoso' });
+                            //SE GENERA EL TOKEN DEL USUARIO (se coloca en la parte que se se realice la validacion del login)
+                            const token = jwt.sign({ userId: email, password: password }, TOKEN_KEY, { expiresIn: "2h" });
+                            console.log(token);
+                            return res.header('authorization', token).json({ error: false, message: 'Inicio de sesión exitoso' });
                         }
                         else {
                             return res.json({ error: true, message: 'e102' });
@@ -131,8 +134,6 @@ class MysqlController {
                         return res.json({ error: true, message: 'e103' });
                     }
                 });
-                //SE GENERA EL TOKEN DEL USUARIO (se coloca en la parte que se se realice la validacion del login)
-                const token = jwt.sign({ userId: email, password: password }, TOKEN_KEY, { expiresIn: "2h" });
             }
             else {
                 res.json({ error: true, message: 'e101' });
