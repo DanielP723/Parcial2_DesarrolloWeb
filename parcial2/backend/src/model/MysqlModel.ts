@@ -1,4 +1,5 @@
 import MysqlDBC from "../DB/mysql/MysqlDBC";
+import bcrypt from 'bcryptjs';
 
 export default class MysqlModel {
 
@@ -8,9 +9,10 @@ export default class MysqlModel {
         this.mysqlDBC = new MysqlDBC();
     }
 
-    public addUser(email: string, password: string, name: string, surname: string, fn: Function){
+    public addUser = async (email: string, password: string, name: string, surname: string, fn: Function) => {
+        let passwordEncrypt = await bcrypt.hash(password, 8);
         this.mysqlDBC.connection();
-        const statament = this.mysqlDBC.statement(`INSERT INTO ??(??, ??, ??, ??) VALUES ('${email}', '${name}', '${surname}', '${password}')`, 
+        const statament = this.mysqlDBC.statement(`INSERT INTO ??(??, ??, ??, ??) VALUES ('${email}', '${name}', '${surname}', '${passwordEncrypt}')`, 
         ['users', 'email', 'name', 'surname', 'password']);
         this.mysqlDBC.pool.query(statament, (error: any, rows: any) => {
             fn(error, rows);

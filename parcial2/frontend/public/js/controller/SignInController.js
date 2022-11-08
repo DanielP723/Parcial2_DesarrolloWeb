@@ -14,11 +14,21 @@ export class SignInController {
                 return alert('Debes rellenar todos los campos');
             }
             let response = yield this.model.signIn(email, password);
+            console.log(response);
             if (response.error == true) {
-                alert('Error al iniciar sesión');
+                if (response.message == 'e102') {
+                    return alert('Contraseña inválida');
+                }
+                if (response.message == 'e103') {
+                    return alert('Usuario no registrado');
+                }
+                if (response.message == 'e101') {
+                    return alert('No se pudo verificar');
+                }
             }
             else {
                 alert('Inicio de sesión exitoso');
+                return window.open('../index.html', '_self');
             }
         });
         this.view = view;

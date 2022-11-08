@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import MysqlModel from "../model/MysqlModel";
+import bcrypt from 'bcryptjs';
 
 const jwt = require('jsonwebtoken'); //importando la libreria para generar token
 const TOKEN_KEY = "x4TvErxRETbVcqaLl5dqMI115eN1p5y" //llave para poder generar el token
@@ -109,7 +110,7 @@ export default class MysqlController {
             return res.status(401).send("Token requerido");
         jwt.verify(token, TOKEN_KEY, (err:any, user:any) =>{
             if(err) return res.status(403).send("Token invalido");
-            req.user = user;
+            // req.user = user;
             next();
         })
     }
@@ -121,12 +122,15 @@ export default class MysqlController {
                     console.error(error);
                     return res.json({ error: true, message: 'e101' });
                 }
-                if (rows.length > 0) {
-                    console.log(email);
-                    console.log(password);
-                    //return res.json({ error: true, message: 'e103' });
+                if (rows.length == 1) {
+                    let passwordEncrypt: any = rows[0].password;
+                    if(bcrypt.compareSync(password, passwordEncrypt)){
+                        return res.json({ error: false, message: 'Inicio de sesión exitoso' })
+                    }else{
+                        return res.json({ error: true, message: 'e102' });
+                    }
                 }else{
-                    console.log('Usuario no encontrado');
+                    return res.json({ error: true, message: 'e103' });
                 }
             });
             //SE GENERA EL TOKEN DEL USUARIO (se coloca en la parte que se se realice la validacion del login)
