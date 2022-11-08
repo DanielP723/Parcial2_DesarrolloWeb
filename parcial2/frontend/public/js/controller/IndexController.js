@@ -51,7 +51,13 @@ export class IndexController {
             if (email && email.length > 0) {
                 let rows;
                 yield this.model.getFavoritesId(email).then(datos => rows = datos);
-                if (rows && rows.length > 0) {
+                if (rows) {
+                    if (rows.length == 0) {
+                        this.model.products = [];
+                        this.model.pages = 0;
+                        this.model.currentPage = 1;
+                        return this.showProducts();
+                    }
                     yield this.model.showFavorites(rows);
                     this.showProducts();
                 }
