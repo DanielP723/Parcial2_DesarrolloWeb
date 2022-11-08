@@ -14,7 +14,6 @@ export class SignInController {
                 return alert('Debes rellenar todos los campos');
             }
             let response = yield this.model.signIn(email, password);
-            console.log(response);
             if (response.error == true) {
                 if (response.message == 'e102') {
                     return alert('Contraseña inválida');
@@ -28,6 +27,7 @@ export class SignInController {
             }
             else {
                 alert('Inicio de sesión exitoso');
+                localStorage.setItem('token', response.token);
                 return window.open('../index.html', '_self');
             }
         });

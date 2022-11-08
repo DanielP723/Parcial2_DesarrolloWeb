@@ -60,10 +60,10 @@ export class IndexModel {
                 .then(() => this.currentPage = 1)
                 .catch(err => console.log(err));
         });
-        this.addToFavorites = (id) => __awaiter(this, void 0, void 0, function* () {
+        this.addToFavorites = (id, token) => __awaiter(this, void 0, void 0, function* () {
             let response = yield fetch(`${this.URI}api/searchFavorites`, {
                 method: 'POST',
-                body: JSON.stringify({ id: id, email: 'prueba@gmail.com' }),
+                body: JSON.stringify({ id: id, token: token }),
                 headers: {
                     "Content-type": "application/json"
                 }

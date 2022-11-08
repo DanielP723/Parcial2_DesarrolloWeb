@@ -22,17 +22,20 @@ export class IndexController {
         */
         this.addToFavorites = (id) => __awaiter(this, void 0, void 0, function* () {
             if (id && id > 0 && id <= this.model.lengthAllProducts) {
-                let response = yield this.model.addToFavorites(id);
-                if (response) {
-                    let temp;
-                    temp = this.view.getElement('corazon' + id);
-                    if (response.insertId != 0) {
-                        temp.classList.add('fa-solid');
-                        temp.classList.remove('fa-regular');
-                    }
-                    else {
-                        temp.classList.remove('fa-solid');
-                        temp.classList.add('fa-regular');
+                let email = localStorage.getItem('token');
+                if (email && email.length != 0) {
+                    let response = yield this.model.addToFavorites(id, email);
+                    if (response) {
+                        let temp;
+                        temp = this.view.getElement('corazon' + id);
+                        if (response.insertId != 0) {
+                            temp.classList.add('fa-solid');
+                            temp.classList.remove('fa-regular');
+                        }
+                        else {
+                            temp.classList.remove('fa-solid');
+                            temp.classList.add('fa-regular');
+                        }
                     }
                 }
             }

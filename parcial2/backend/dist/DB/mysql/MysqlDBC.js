@@ -14,14 +14,6 @@ class MysqlDBC {
                 console.info('DB: pool connection');
             });
         };
-        this.limit = (start, step = parseInt(process.env.DBPAG || '10')) => {
-            let limit = [1, 9];
-            if (start) {
-                start = (start > 0) ? (start - 1) * step : 1;
-                limit = [start, step];
-            }
-            return limit;
-        };
         this.pool = mysql_1.default.createPool({
             connectionLimit: parseInt(process.env.DBCONNLIMIT || '10'),
             host: process.env.DBHOST,

@@ -1,9 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import { json, NextFunction, Request, Response } from "express";
 import MysqlModel from "../model/MysqlModel";
 import bcrypt from 'bcryptjs';
-
-const jwt = require('jsonwebtoken'); //importando la libreria para generar token
-const TOKEN_KEY = "x4TvErxRETbVcqaLl5dqMI115eN1p5y" //llave para poder generar el token
+const jwt = require('jsonwebtoken');
 
 export default class MysqlController {
 
@@ -32,7 +30,12 @@ export default class MysqlController {
                             return res.json({ error: true, message: 'e101' });
                         }
                         if (rows) {
-                            return res.json(rows);
+                            const token = jwt.sign(
+                                { userId: email, password: password },
+                                process.env.TOKEN_KEY,
+                                { expiresIn: "2h" }
+                            );
+                            return res.header('authorization', token).json(rows);
                         }
                     });
                 }
@@ -42,30 +45,37 @@ export default class MysqlController {
         }
     }
 
-
     public searchFavorites = (req: Request, res: Response) => {
         const id = parseInt(req.body.id);
-        const email = req.body.email;
-        if (id && email) {
-            this.model.searchFavorites(id, email, (error: any, rows: any) => {
+        const token = req.body.token;
+        if (token) {
+            let decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+            if (!decodedToken.email) {
+                return res.json({ 'error': true, message: 'e104' });
+            }
+            if (!id) {
+                return res.json({ 'error': true, message: 'e101' });
+            }
+            this.model.searchFavorites(id, decodedToken.email, (error: any, rows: any) => {
                 if (error) {
                     console.error(error);
                     return res.json({ 'error': true, message: 'e101' });
                 }
                 if (rows.length > 0) {
-                    let rows2: any = this.deleteFavorites(id, email, res);
+                    let rows2: any = this.deleteFavorites(id, decodedToken.email, res);
                     if (rows2) {
                         return res.json([{ 'error': false, message: 'Delete favorites success' }]);
                     }
                 } else {
-                    let rows2: any = this.addFavorites(id, email, res);
+                    let rows2: any = this.addFavorites(id, decodedToken.email, res);
                     if (rows2) {
                         return res.json([{ 'error': false, message: 'Add favorites success' }]);
                     }
                 }
             });
         } else {
-            return res.json({ 'error': true, message: 'e101' });
+            console.log('Token Inválido')
+            return res.json({ 'error': true, message: 'e104' });
         }
     }
 
@@ -108,7 +118,7 @@ export default class MysqlController {
         console.log(authHeader);
         if (token == null)
             return res.status(401).send("Token requerido");
-        jwt.verify(token, TOKEN_KEY, (err: any, user: any) => {
+        jwt.verify(token, process.env.TOKEN_KEY, (err: any, user: any) => {
             if (err) return res.status(403).send("Token invalido");
             // req.user = user;
             next();
@@ -125,14 +135,12 @@ export default class MysqlController {
                 if (rows.length == 1) {
                     let passwordEncrypt: any = rows[0].password;
                     if (bcrypt.compareSync(password, passwordEncrypt)) {
-                        //SE GENERA EL TOKEN DEL USUARIO (se coloca en la parte que se se realice la validacion del login)
                         const token = jwt.sign(
-                            { userId: email, password: password },
-                            TOKEN_KEY,
+                            { email: email, password: password },
+                            process.env.TOKEN_KEY,
                             { expiresIn: "2h" }
                         );
-                        console.log(token);
-                        return res.header('authorization', token).json({ error: false, message: 'Inicio de sesión exitoso' });
+                        return res.header('authorization', token).json({ error: false, message: 'Inicio de sesión exitoso', token: token });
                     } else {
                         return res.json({ error: true, message: 'e102' });
                     }
@@ -144,53 +152,4 @@ export default class MysqlController {
             res.json({ error: true, message: 'e101' });
         }
     }
-
-    public getMovies = (request: Request, response: Response) => {
-        this.moviesModel.getMovies(this.moviesModel.limit(parseInt(request.params.page), 10), (error: any, rows: any) => {
-            if (error) {
-                console.error(error);
-                return response.json({ error: true, message: 'e101' });
-            }
-            if (rows) {
-                return response.json(rows);
-            } else {
-                return response.status(404).json({ error: false, message: 'Movies not found' });
-            }
-        });
-    }
-
-    public getMovie = (request: Request, response: Response) => {
-        const id = parseInt(request.params.id);
-        if (id) {
-            this.moviesModel.getMovie(id, (error: any, rows: any) => {
-                if (error) {
-                    console.error(error);
-                    return response.json({ error: true, message: 'e101' });
-                }
-                if (rows) {
-                    return response.json(rows);
-                } else {
-                    return response.status(404).json({ error: false, message: 'Movie not found' });
-                }
-            });
-        } else {
-            return response.status(404).json({ error: false, message: 'Movie not found' });
-        }
-    }
-
-    public updateTitleMovie = (request: Request, response: Response) => {
-        if (request.body.data) {
-            this.moviesModel.updateTitleMovie({ id: parseInt(request.body.data.id), title: request.body.data.title }, (error: any, rows: any) => {
-                if (error) {
-                    console.error(error);
-                    return response.json({ error: true, message: 'e201' });
-                } else {
-                    return response.json({ error: false, message: 'Title update' });
-                }
-            });
-        } else {
-            return response.status(404).json({ error: false, message: 'Movie not found' });
-        }
-    }
-
 }

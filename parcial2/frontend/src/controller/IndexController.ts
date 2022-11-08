@@ -119,16 +119,19 @@ export class IndexController {
     */
     addToFavorites = async (id: number) => {
         if (id && id > 0 && id <= this.model.lengthAllProducts) {
-            let response: any = await this.model.addToFavorites(id);
-            if (response) {
-                let temp: any;
-                temp = this.view.getElement('corazon' + id);
-                if (response.insertId != 0) {
-                    temp.classList.add('fa-solid');
-                    temp.classList.remove('fa-regular');
-                } else {
-                    temp.classList.remove('fa-solid');
-                    temp.classList.add('fa-regular');
+            let email = localStorage.getItem('token');
+            if (email && email.length != 0) {
+                let response: any = await this.model.addToFavorites(id, email);
+                if (response) {
+                    let temp: any;
+                    temp = this.view.getElement('corazon' + id);
+                    if (response.insertId != 0) {
+                        temp.classList.add('fa-solid');
+                        temp.classList.remove('fa-regular');
+                    } else {
+                        temp.classList.remove('fa-solid');
+                        temp.classList.add('fa-regular');
+                    }
                 }
             }
         }

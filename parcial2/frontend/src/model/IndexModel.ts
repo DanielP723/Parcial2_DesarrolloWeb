@@ -1,3 +1,5 @@
+import { json } from "express";
+
 export class IndexModel {
 
     public URI = 'http://localhost:1802/';
@@ -75,10 +77,10 @@ export class IndexModel {
             .catch(err => console.log(err));
     }
 
-    addToFavorites = async (id: number) => {
+    addToFavorites = async (id: number, token: string) => {
         let response = await fetch(`${this.URI}api/searchFavorites`, {
             method: 'POST',
-            body: JSON.stringify({ id: id, email: 'prueba@gmail.com' }),
+            body: JSON.stringify({ id: id, token: token}),
             headers: {
                 "Content-type": "application/json"
             }

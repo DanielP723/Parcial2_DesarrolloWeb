@@ -30,13 +30,4 @@ export default class MysqlDBC {
         return mysql.format(statement, data);        
     }
 
-    public limit = (start: number, step: number = parseInt(process.env.DBPAG || '10')): number[] => {
-        let limit = [1, 9];
-        if (start) {
-            start = (start > 0) ? (start - 1) * step : 1;
-            limit = [start, step];
-        }
-        return limit;
-    }
-
 }
