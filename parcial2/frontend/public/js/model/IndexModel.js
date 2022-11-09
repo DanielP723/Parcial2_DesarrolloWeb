@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 export class IndexModel {
     constructor() {
         this.URI = 'http://localhost:1802/';
+        this.favorites = [];
         this.saveProducts = () => __awaiter(this, void 0, void 0, function* () {
             yield fetch(`${this.URI}api/products`)
                 .then(res => res.json())
@@ -23,6 +24,16 @@ export class IndexModel {
                 .then(() => this.lengthAllProducts = this.products.length)
                 .then(() => this.getMax(this.products))
                 .catch(err => console.log(err));
+        });
+        this.isLogged = (token) => __awaiter(this, void 0, void 0, function* () {
+            let response = yield fetch(`${this.URI}api/isLogged`, {
+                method: 'POST',
+                body: JSON.stringify({ token: token }),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            });
+            return response.json();
         });
         this.searchProducts = (query) => __awaiter(this, void 0, void 0, function* () {
             yield fetch(`${this.URI}api/search`, {

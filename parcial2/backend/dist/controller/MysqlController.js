@@ -37,10 +37,32 @@ class MysqlController {
                 res.json({ error: true, message: 'e101' });
             }
         };
+        this.isLogged = (req, res) => {
+            const token = req.body.token;
+            if (token) {
+                let decodedToken;
+                try {
+                    decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+                }
+                catch (_a) {
+                    return res.json({ 'error': true, message: 'e104' });
+                }
+                if (!decodedToken.email) {
+                    return res.json({ 'error': true, message: 'e104' });
+                }
+                return res.json({ 'error': false, message: 'Token valid' });
+            }
+        };
         this.showFavorites = (req, res) => {
             const token = req.body.token;
             if (token) {
-                let decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+                let decodedToken;
+                try {
+                    decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+                }
+                catch (_a) {
+                    return res.json({ 'error': true, message: 'e104' });
+                }
                 if (!decodedToken.email) {
                     return res.json({ 'error': true, message: 'e104' });
                 }
@@ -63,7 +85,13 @@ class MysqlController {
             const id = parseInt(req.body.id);
             const token = req.body.token;
             if (token) {
-                let decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+                let decodedToken;
+                try {
+                    decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+                }
+                catch (_a) {
+                    return res.json({ 'error': true, message: 'e104' });
+                }
                 if (!decodedToken.email) {
                     return res.json({ 'error': true, message: 'e104' });
                 }

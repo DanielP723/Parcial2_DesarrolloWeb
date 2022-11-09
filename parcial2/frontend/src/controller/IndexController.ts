@@ -25,12 +25,43 @@ export class IndexController {
         this.addMethodShowFavorites();
     }
 
+    isLogged = async () => {
+        let token = localStorage.getItem('token');
+        if(token && token.length > 0){
+            let response = await this.model.isLogged(token);
+            if(response.error == false){
+                await this.model.getFavoritesId(token)
+                    .then(datos => {
+                        if(datos.error == true){
+                            return;
+                        }
+                        if(datos){
+                            if(datos.length == 0){
+                                this.model.favorites = [];
+                            }else{
+                                for (let i = 0; i < datos.length; i++) {
+                                    this.model.favorites.push(datos[i].id_product);
+                                }
+                            }
+                        }
+                    });
+            }
+        }
+    }
+
     addMethodShowFavorites() {
         this.view.btnFavorites.addEventListener('click', async () => {
             let email = localStorage.getItem('token');
             if(email && email.length > 0){
                 let rows: any;
                 await this.model.getFavoritesId(email).then(datos => rows = datos);
+                if(rows.error == true){
+                    if(rows.message == 'e104'){
+                        return alert('Debes iniciar sesión para poder ver tus favoritos');
+                    }else{
+                        return alert('Error al ver favoritos');
+                    }
+                }
                 if(rows){
                     if(rows.length == 0){
                         this.model.products = [];
@@ -41,6 +72,8 @@ export class IndexController {
                     await this.model.showFavorites(rows);
                     this.showProducts();
                 }
+            }else{
+                return alert('Debes iniciar sesión para poder ver tus favoritos');
             }
         })
     }
@@ -143,6 +176,13 @@ export class IndexController {
                 if (response) {
                     let temp: any;
                     temp = this.view.getElement('corazon' + id);
+                    if(response.error == true){
+                        if(response.message == 'e104'){
+                            return alert('Debes iniciar sesión para poder agregar a favoritos');
+                        }else{
+                            return alert('Error al agregar a favoritos');
+                        }
+                    }
                     if (response.insertId != 0) {
                         temp.classList.add('fa-solid');
                         temp.classList.remove('fa-regular');
@@ -151,12 +191,15 @@ export class IndexController {
                         temp.classList.add('fa-regular');
                     }
                 }
+            }else{
+                return alert('Debes iniciar sesión para poder agregar a favoritos');
             }
         }
     }
 
-    showProducts() {
-        this.view.showProducts(this.model.products, this.model.currentPage);
+    showProducts = async () => {
+        await this.isLogged();
+        this.view.showProducts(this.model.products, this.model.favorites, this.model.currentPage);
         this.view.pagination(this.model.pages, this.model.currentPage);
         this.addMethodFavorites();
     }

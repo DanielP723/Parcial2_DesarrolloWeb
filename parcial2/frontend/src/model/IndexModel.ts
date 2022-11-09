@@ -8,6 +8,7 @@ export class IndexModel {
     public currentPage: number;
     public maxPrice: number;
     public lengthAllProducts: number;
+    public favorites: any = [];
 
     constructor() {
         this.pages = 0;
@@ -29,6 +30,17 @@ export class IndexModel {
             .then(() => this.lengthAllProducts = this.products.length)
             .then(() => this.getMax(this.products))
             .catch(err => console.log(err));
+    }
+
+    isLogged = async (token: any) => {
+        let response = await fetch(`${this.URI}api/isLogged`, {
+            method: 'POST',
+            body: JSON.stringify({ token: token }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        });
+        return response.json();
     }
 
     getMax(products: any) {

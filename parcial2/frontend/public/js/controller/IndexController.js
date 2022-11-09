@@ -18,6 +18,30 @@ export class IndexController {
             this.addMethodSearch();
             this.addMethodShowFavorites();
         });
+        this.isLogged = () => __awaiter(this, void 0, void 0, function* () {
+            let token = localStorage.getItem('token');
+            if (token && token.length > 0) {
+                let response = yield this.model.isLogged(token);
+                if (response.error == false) {
+                    yield this.model.getFavoritesId(token)
+                        .then(datos => {
+                        if (datos.error == true) {
+                            return;
+                        }
+                        if (datos) {
+                            if (datos.length == 0) {
+                                this.model.favorites = [];
+                            }
+                            else {
+                                for (let i = 0; i < datos.length; i++) {
+                                    this.model.favorites.push(datos[i].id_product);
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
         this.addToFavorites = (id) => __awaiter(this, void 0, void 0, function* () {
             if (id && id > 0 && id <= this.model.lengthAllProducts) {
                 let email = localStorage.getItem('token');
@@ -26,6 +50,14 @@ export class IndexController {
                     if (response) {
                         let temp;
                         temp = this.view.getElement('corazon' + id);
+                        if (response.error == true) {
+                            if (response.message == 'e104') {
+                                return alert('Debes iniciar sesión para poder agregar a favoritos');
+                            }
+                            else {
+                                return alert('Error al agregar a favoritos');
+                            }
+                        }
                         if (response.insertId != 0) {
                             temp.classList.add('fa-solid');
                             temp.classList.remove('fa-regular');
@@ -36,7 +68,16 @@ export class IndexController {
                         }
                     }
                 }
+                else {
+                    return alert('Debes iniciar sesión para poder agregar a favoritos');
+                }
             }
+        });
+        this.showProducts = () => __awaiter(this, void 0, void 0, function* () {
+            yield this.isLogged();
+            this.view.showProducts(this.model.products, this.model.favorites, this.model.currentPage);
+            this.view.pagination(this.model.pages, this.model.currentPage);
+            this.addMethodFavorites();
         });
         this.view = view;
         this.model = model;
@@ -51,6 +92,14 @@ export class IndexController {
             if (email && email.length > 0) {
                 let rows;
                 yield this.model.getFavoritesId(email).then(datos => rows = datos);
+                if (rows.error == true) {
+                    if (rows.message == 'e104') {
+                        return alert('Debes iniciar sesión para poder ver tus favoritos');
+                    }
+                    else {
+                        return alert('Error al ver favoritos');
+                    }
+                }
                 if (rows) {
                     if (rows.length == 0) {
                         this.model.products = [];
@@ -61,6 +110,9 @@ export class IndexController {
                     yield this.model.showFavorites(rows);
                     this.showProducts();
                 }
+            }
+            else {
+                return alert('Debes iniciar sesión para poder ver tus favoritos');
             }
         }));
     }
@@ -150,10 +202,5 @@ export class IndexController {
                 temp.addEventListener('click', () => this.addToFavorites(id));
             }
         }
-    }
-    showProducts() {
-        this.view.showProducts(this.model.products, this.model.currentPage);
-        this.view.pagination(this.model.pages, this.model.currentPage);
-        this.addMethodFavorites();
     }
 }

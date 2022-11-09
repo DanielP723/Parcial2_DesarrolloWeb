@@ -12,6 +12,7 @@ class MysqlRoute {
             this.router.post('/searchFavorites', this.controller.searchFavorites);
             this.router.post('/signIn', this.controller.signIn);
             this.router.post('/showFavorites', this.controller.showFavorites);
+            this.router.post('/isLogged', this.controller.isLogged);
         };
         this.router = (0, express_1.Router)();
         this.controller = new MysqlController_1.default();

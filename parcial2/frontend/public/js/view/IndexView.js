@@ -16,7 +16,7 @@ export class IndexView {
         this.hearts = [];
         this.btnFavorites = this.getElement('btnMisFavoritos');
     }
-    showProducts(products, page) {
+    showProducts(products, favorites, page) {
         this.ids = [];
         if (products.length == 0) {
             this.container.innerHTML = '';
@@ -33,7 +33,12 @@ export class IndexView {
             for (let j = 0; j < 4; j++) {
                 html += "<div class='col-3 producto'>" + //onmouseover='nombreCompleto("+productos[index][0]+")' onmouseout='nombreCorto("+productos[index][0]+")
                     "     <div class='imagen my-3'>";
-                html += "<i class='fa-regular fa-heart' id='corazon" + products[index].ID + "'></i>";
+                if (favorites.includes(parseInt(products[index].ID))) {
+                    html += "<i class='fa-solid fa-heart' id='corazon" + products[index].ID + "'></i>";
+                }
+                else {
+                    html += "<i class='fa-regular fa-heart' id='corazon" + products[index].ID + "'></i>";
+                }
                 this.ids.push(products[index].ID);
                 html += "<img  src='" + products[index].image + "'alt='product" + String(index + 1) + "'>" +
                     "     </div>" +
