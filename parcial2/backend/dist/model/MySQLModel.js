@@ -40,6 +40,27 @@ class MysqlModel {
             fn(error, rows);
         });
     }
+    searchCart(id, email, fn) {
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`SELECT * FROM ?? WHERE ??  = ${id} AND ?? LIKE '${email}';`, ['cart', 'id_product', 'email_user']);
+        this.mysqlDBC.pool.query(statament, (error, rows) => {
+            fn(error, rows);
+        });
+    }
+    insertToCart(id, email, fn) {
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`INSERT INTO ??(??,??,??) VALUES(${id}, 1, '${email}');`, ['cart', 'id_product', 'amount', 'email_user']);
+        this.mysqlDBC.pool.query(statament, (error, rows) => {
+            fn(error, rows);
+        });
+    }
+    addToCart(id, amount, email, fn) {
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`CALL ??(${id}, ${amount} ,'${email}');`, ['addAmountCart']);
+        this.mysqlDBC.pool.query(statament, (error, rows) => {
+            fn(error, rows);
+        });
+    }
     searchFavorites(id, email, fn) {
         this.mysqlDBC.connection();
         const statament = this.mysqlDBC.statement(`SELECT * FROM ?? WHERE ??  = ${id} AND ?? LIKE '${email}';`, ['favorites', 'id_product', 'email_user']);

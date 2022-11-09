@@ -37,6 +37,33 @@ export default class MysqlModel {
         });
     }
 
+    public searchCart(id: number, email: string, fn: Function){
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`SELECT * FROM ?? WHERE ??  = ${id} AND ?? LIKE '${email}';`, 
+        ['cart', 'id_product', 'email_user']);
+        this.mysqlDBC.pool.query(statament, (error: any, rows: any) => {
+            fn(error, rows);
+        });
+    }
+
+    public insertToCart(id: number, email: string, fn: Function){
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`INSERT INTO ??(??,??,??) VALUES(${id}, 1, '${email}');`, 
+        ['cart', 'id_product', 'amount', 'email_user']);
+        this.mysqlDBC.pool.query(statament, (error: any, rows: any) => {
+            fn(error, rows);
+        });
+    }
+
+    public addToCart(id: number, amount: number, email: string, fn: Function){
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`CALL ??(${id}, ${amount} ,'${email}');`, 
+        ['addAmountCart']);
+        this.mysqlDBC.pool.query(statament, (error: any, rows: any) => {
+            fn(error, rows);
+        });
+    }
+
     public searchFavorites(id: number, email: string, fn: Function){
         this.mysqlDBC.connection();
         const statament = this.mysqlDBC.statement(`SELECT * FROM ?? WHERE ??  = ${id} AND ?? LIKE '${email}';`, 

@@ -42,6 +42,24 @@ export class IndexController {
                 }
             }
         });
+        this.addToCart = (id) => __awaiter(this, void 0, void 0, function* () {
+            if (id && id > 0 && id <= this.model.lengthAllProducts) {
+                let email = localStorage.getItem('token');
+                if (email && email.length != 0) {
+                    let response = yield this.model.addToCart(id, email);
+                    if (response.error == true) {
+                        if (response.message == 'e104') {
+                            return alert('Debes iniciar sesión para poder agregar al carrito');
+                        }
+                        return alert('Error al agregar al carrito');
+                    }
+                    // Se debe buscar los ids de los productos añadidos al carrito
+                }
+                else {
+                    return alert('Debes iniciar sesión para poder agregar al carrito');
+                }
+            }
+        });
         this.addToFavorites = (id) => __awaiter(this, void 0, void 0, function* () {
             if (id && id > 0 && id <= this.model.lengthAllProducts) {
                 let email = localStorage.getItem('token');
@@ -78,6 +96,7 @@ export class IndexController {
             this.view.showProducts(this.model.products, this.model.favorites, this.model.currentPage);
             this.view.pagination(this.model.pages, this.model.currentPage);
             this.addMethodFavorites();
+            this.addMethodAddCart();
         });
         this.view = view;
         this.model = model;
@@ -200,6 +219,16 @@ export class IndexController {
             if (temp) {
                 let id = this.view.ids[i];
                 temp.addEventListener('click', () => this.addToFavorites(id));
+            }
+        }
+    }
+    addMethodAddCart() {
+        for (let i = 0; i < this.view.ids.length; i++) {
+            let temp;
+            temp = this.view.getElement('agregar' + this.view.ids[i]);
+            if (temp) {
+                let id = this.view.ids[i];
+                temp.addEventListener('click', () => this.addToCart(id));
             }
         }
     }

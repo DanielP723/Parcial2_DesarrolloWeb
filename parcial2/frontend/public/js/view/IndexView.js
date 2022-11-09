@@ -54,7 +54,7 @@ export class IndexView {
                         "        <label id='marca'>" + products[index].brand + "</label>" +
                         "        <h4 class='precio mt - 2'>" + String(parseFloat(products[index].price).toFixed(2)) + " $</h4>" +
                         "    </div>" +
-                        "        <a id='agregar' class='agregar' onclick='agregarProducto(" + products[index].ID + ")'><i class='fa-solid fa-cart-plus'></i>Agregar al carrito</a>" +
+                        "        <a id='agregar" + String(products[index].ID) + "' class='agregar'><i class='fa-solid fa-cart-plus'></i>Agregar al carrito</a>" +
                         "</div>";
                 index++;
                 if (index >= products.length) {

@@ -18,6 +18,7 @@ class MysqlRoute{
         this.router.post('/signIn', this.controller.signIn);
         this.router.post('/showFavorites', this.controller.showFavorites);
         this.router.post('/isLogged', this.controller.isLogged);
+        this.router.post('/addToCart', this.controller.addToCart);
     }
 }
 

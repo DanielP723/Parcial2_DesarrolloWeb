@@ -101,6 +101,18 @@ export class IndexModel {
         return res;
     }
 
+    addToCart = async (id: number, token: string) => {
+        let response = await fetch(`${this.URI}api/addToCart`, {
+            method: 'POST',
+            body: JSON.stringify({ id: id, token: token }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        });
+        let res = await response.json();console.log(res);
+        return res;
+    }
+
     getFavoritesId = async (token: any) => {
         let response = await fetch(`${this.URI}api/showFavorites`, {
             method: 'POST',

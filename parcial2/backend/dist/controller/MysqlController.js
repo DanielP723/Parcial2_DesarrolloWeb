@@ -81,6 +81,53 @@ class MysqlController {
                 return res.json({ 'error': true, message: 'e104' });
             }
         };
+        this.addToCart = (req, res) => {
+            const id = parseInt(req.body.id);
+            const token = req.body.token;
+            if (token) {
+                let decodedToken;
+                try {
+                    decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+                }
+                catch (_a) {
+                    return res.json({ 'error': true, message: 'e104' });
+                }
+                if (!decodedToken.email) {
+                    return res.json({ 'error': true, message: 'e104' });
+                }
+                if (!id) {
+                    return res.json({ 'error': true, message: 'e101' });
+                }
+                this.model.searchCart(id, decodedToken.email, (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        return res.json({ 'error': true, message: 'e101' });
+                    }
+                    if (rows.length == 0) {
+                        this.model.insertToCart(id, decodedToken.email, (error, rows) => {
+                            if (error) {
+                                console.log(error);
+                                return res.json({ 'error': true, message: 'e101' });
+                            }
+                            if (rows.length > 0) {
+                                return res.json({ 'error': false, message: 'Success add to cart' });
+                            }
+                        });
+                    }
+                    if (rows.length > 0) {
+                        this.model.addToCart(id, 1, decodedToken.email, (error, rows) => {
+                            if (error) {
+                                console.log(error);
+                                return res.json({ 'error': true, message: 'e101' });
+                            }
+                            if (rows.length > 0) {
+                                return res.json({ 'error': false, message: 'Success add to cart' });
+                            }
+                        });
+                    }
+                });
+            }
+        };
         this.searchFavorites = (req, res) => {
             const id = parseInt(req.body.id);
             const token = req.body.token;
