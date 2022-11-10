@@ -127,17 +127,23 @@ export class IndexController {
         });
         this.showProducts = () => __awaiter(this, void 0, void 0, function* () {
             yield this.isLogged();
-            this.showCart();
+            yield this.showCart();
             this.view.showProducts(this.model.products, this.model.favorites, this.model.currentPage);
             this.view.pagination(this.model.pages, this.model.currentPage);
             this.addMethodFavorites();
             this.addMethodAddCart();
+            this.addMethodBuy();
         });
         this.view = view;
         this.model = model;
         this.config();
         this.view.logo.addEventListener('click', () => {
             window.location.reload();
+        });
+    }
+    addMethodBuy() {
+        this.view.btnBuy.addEventListener('click', () => {
+            alert('prueba');
         });
     }
     addMethodShowFavorites() {

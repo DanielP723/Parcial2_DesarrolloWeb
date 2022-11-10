@@ -25,6 +25,12 @@ export class IndexController {
         this.addMethodShowFavorites();
     }
 
+    addMethodBuy(){
+        this.view.btnBuy.addEventListener('click', () => {
+            alert('prueba');
+        });
+    }
+
     isLogged = async () => {
         let token = localStorage.getItem('token');
         if (token && token.length > 0) {
@@ -264,11 +270,12 @@ export class IndexController {
 
     showProducts = async () => {
         await this.isLogged();
-        this.showCart();
+        await this.showCart();
         this.view.showProducts(this.model.products, this.model.favorites, this.model.currentPage);
         this.view.pagination(this.model.pages, this.model.currentPage);
         this.addMethodFavorites();
         this.addMethodAddCart();
+        this.addMethodBuy();
     }
 
 }

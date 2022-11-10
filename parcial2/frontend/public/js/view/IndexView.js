@@ -16,6 +16,7 @@ export class IndexView {
         this.hearts = [];
         this.btnFavorites = this.getElement('btnMisFavoritos');
         this.floatCart = this.getElement('carroCompras');
+        this.btnBuy = this.getElement('btn2');
     }
     showProducts(products, favorites, page) {
         this.ids = [];
@@ -101,18 +102,19 @@ export class IndexView {
         if (subTotal + (19 * subTotal / 100) > 45) {
             html += "<p id='alerta'>Envío gratuito.</p>" +
                 "<li class='btnsCarro'><a id='btn' href='./carro.html' target='_blank'>Ir al carrito</a></li>" +
-                "<li class='btnsCarro'><a id='btn2' href='#' >Realizar pedido</a></li>";
+                "<li class='btnsCarro' id='btn2'><a href='#' >Realizar pedido</a></li>";
         }
         else if (precioTotal == 0) {
             html += "<li class='btnsCarro'><a id='btn' href='./carro.html' target='_blank'>Ir al carrito</a></li>" +
-                "<li class='btnsCarro'><a id='btn2' href='#' >Realizar pedido</a></li>";
+                "<li class='btnsCarro' id='btn2'><a href='#' >Realizar pedido</a></li>";
         }
         else {
             html += "<p id='alerta'>Te faltan " + (45 - precioTotal).toFixed(2) + "$ para el envío gratuito.</p>" +
                 "<li class='btnsCarro'><a id='btn' href='./carro.html' target='_blank'>Ir al carrito</a></li>" +
-                "<li class='btnsCarro'><a id='btn2' href='#' >Realizar pedido</a></li>";
+                "<li class='btnsCarro' id='btn2'><a href='#' >Realizar pedido</a></li>";
         }
         this.floatCart.innerHTML = html;
+        this.btnBuy = this.getElement('btn2');
     }
     pagination(pages, currentPage) {
         let index = currentPage;
