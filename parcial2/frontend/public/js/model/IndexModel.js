@@ -157,6 +157,17 @@ export class IndexModel {
             let res = yield response.json();
             return res;
         });
+        this.deleteProductCart = (id, token) => __awaiter(this, void 0, void 0, function* () {
+            let response = yield fetch(`${this.URI}api/deleteProductCart`, {
+                method: 'POST',
+                body: JSON.stringify({ id: id, token: token }),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            });
+            let res = yield response.json();
+            return res;
+        });
         this.pages = 0;
         this.currentPage = 0;
         this.maxPrice = 0;

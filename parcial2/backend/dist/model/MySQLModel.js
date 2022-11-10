@@ -96,5 +96,12 @@ class MysqlModel {
             fn(error, rows);
         });
     }
+    deleteProductCart(id, email, fn) {
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`DELETE FROM ?? WHERE ?? = ${id} AND ?? LIKE '${email}';`, ['cart', 'id_product', 'email_user']);
+        this.mysqlDBC.pool.query(statament, (error, rows) => {
+            fn(error, rows);
+        });
+    }
 }
 exports.default = MysqlModel;

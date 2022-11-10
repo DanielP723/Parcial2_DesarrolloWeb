@@ -16,6 +16,7 @@ class MysqlRoute {
             this.router.post('/addToCart', this.controller.addToCart);
             this.router.post('/getCartId', this.controller.getCartId);
             this.router.post('/makeOrder', this.controller.makeOrder);
+            this.router.post('/deleteProductCart', this.controller.deleteProductCart);
         };
         this.router = (0, express_1.Router)();
         this.controller = new MysqlController_1.default();

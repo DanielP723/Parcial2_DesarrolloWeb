@@ -183,4 +183,16 @@ export class IndexModel {
         let res = await response.json();
         return res;
     }
+
+    deleteProductCart = async (id: number, token: string) => {
+        let response = await fetch(`${this.URI}api/deleteProductCart`, {
+            method: 'POST',
+            body: JSON.stringify({ id: id, token: token }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        });
+        let res = await response.json();
+        return res;
+    }
 }

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carro</title>
+    <link rel="stylesheet" href="./css/cartStyle.css">
+    <script src="https://kit.fontawesome.com/48c1f129e4.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <a href="./buenaVida.html"><img src="./src-eco-tienda/logo.jpg" alt="" height="60"></a>
+        <div class="titulo">
+            <h1>Esta es tu cesta de la compra</h1>
+        </div>
+        <div class="cantidadProductos">
+            <p><b># Articulos</b></p>
+        </div>
+    </header>
+    <div class="container">
+        
+        <div class="principal">
+            <div class="contenido">
+                <div class="producto">
+                    <div class="imagenProducto">
+                        <img src="./src-eco-tienda/1.jpg" alt="" height ="120">
+                    </div>
+                    <div class="infoProducto">
+                        <h2 class="titulo">Titulo producto</h2>
+                        <p class="talla">Talla: 60USD</p>
+                        <p class="marca">Marca: lorem</p>
+                    </div>
+                    <div class="cantidad">
+                        <label for="cantidadProducto">Cantidad</label>
+                        <input type="number" id="cantidadProducto" class="cantidadProducto" value="0" min="0" max="100">
+                    </div>
+                    <div class="precioCarro">
+                        <p class="precioCarro"><b>15.5$</b></p>
+                    </div>
+                    <i id="eliminarProducto" class="fa-solid fa-trash quitarProducto"></i>
+                </div>
+
+                <div class="producto">
+                    <div class="imagenProducto">
+                        <img src="./src-eco-tienda/2.jpg" alt="" height ="120">
+                    </div>
+                    <div class="infoProducto">
+                        <h2 class="titulo">Titulo producto</h2>
+                        <p class="talla">Talla: 60USD</p>
+                        <p class="marca">Marca: lorem</p>
+                    </div>
+                    <div class="cantidad">
+                        <label for="cantidadProducto">Cantidad</label>
+                        <input type="number" id="cantidadProducto" class="cantidadProducto" value="0" min="0" max="100">
+                    </div>
+                    <div class="precioCarro">
+                        <p class="precioCarro"><b>15.5$</b></p>
+                    </div>
+                    <i id="eliminarProducto" class="fa-solid fa-trash quitarProducto"></i>
+                </div>
+
+                <div class="producto">
+                    <div class="imagenProducto">
+                        <img src="./src-eco-tienda/3.jpg" alt="" height ="120">
+                    </div>
+                    <div class="infoProducto">
+                        <h2 class="titulo">Titulo producto</h2>
+                        <p class="talla">Talla: 60USD</p>
+                        <p class="marca">Marca: lorem</p>
+                    </div>
+                    <div class="cantidad">
+                        <label for="cantidadProducto">Cantidad</label>
+                        <input type="number" id="cantidadProducto" class="cantidadProducto" value="0" min="0" max="100">
+                    </div>
+                    <div class="precioCarro">
+                        <p class="precioCarro"><b>15.5$</b></p>
+                    </div>
+                    <i id="eliminarProducto" class="fa-solid fa-trash quitarProducto"></i>
+                </div>
+            </div>
+        </div>
+        
+
+        <aside class="slider">
+            <header>
+                <h3 class="tituloLateral">Resumen de tu pedido:</h3>
+            </header>
+            <div class="contenidoAside">
+                <div class="subtotal">
+                    <p>SUBTOTAL</p>
+                    <p class="subtotalPrecio">80.0$</p>
+                </div>
+                <div class="total">
+                    <p><b>TOTAL:</b></p>
+                    <p class="totalPrecio"><b>86.0$</b></p>
+                </div>
+                <p class="iva">(IVA no incluido)</p>
+
+                <input type="button"  class="btnCarro" value="Realizar pedido">
+                <a href="" class="pregunta">¿Quieres más productos?</a>
+            </div>
+        </aside>
+
+    </div>    
+</body>
+<script src="logic_carro.js"></script>
+</html>

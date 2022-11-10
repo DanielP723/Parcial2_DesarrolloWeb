@@ -1,0 +1,160 @@
+/*  ----------------- carro------------------ */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'WorkSans-Regular', Arial, Helvetica, sans-serif;
+    background: #fff;
+}
+
+header {
+    width: 100%;
+    margin: 20px auto;
+}
+
+header img {
+    border-radius: 10px;
+    margin-left: 580px;
+}
+
+header .titulo {
+    margin: 0 auto;
+    text-align: center;
+}
+
+header .cantidadProductos {
+    margin-left: 20px;
+    margin-bottom: 20px;
+    color: #252525;
+    font-size: 16px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+}
+
+.container .principal {
+    width: 100%;
+}
+
+.contenido {
+    width: 70%;
+    margin-left: 30px;
+    justify-content: space-between;
+}
+
+.producto {
+    width: 100%;
+    display: flex;
+    max-width: 700px;
+}
+
+.imagenProducto {
+    width: 16%;
+}
+
+.infoProducto {
+    margin-top: 20px;
+    margin-left: 28px;
+}
+
+.titulo {
+    font-size: 20px;
+}
+
+.talla {
+    margin-bottom: 10px;
+}
+
+.marca {
+    color: #696969;
+}
+
+.cantidad {
+    margin: auto 30px;
+    padding: 8px;
+}
+
+.cantidad input[type="number"] {
+    width: 50px;
+    height: 40px;
+    color: #5CCB5F;
+    text-align: center;
+}
+
+.precioCarro {
+    margin: auto 5px;
+}
+
+.producto #eliminarProducto {
+    margin: auto 20px;
+    color: #252525;
+    cursor: pointer;
+}
+
+.producto #eliminarProducto:hover {
+    color: #696969;
+}
+
+.container aside {
+    width: 30%;
+    background: #cfcfcfe5;
+    padding: 20px;
+}
+
+.aside header {
+    width: 100%;
+}
+
+.contenidoAside {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.subtotal {
+    margin: 12px 8px;
+    display: flex;
+    justify-content: space-between;
+    color: #313131;
+    font-size: 14px;
+}
+
+.contenidoAside .total {
+    margin: 12px 8px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+}
+
+.contenidoAside .iva {
+    font-size: 12px;
+    margin: -8px 0 120px 20px;
+}
+
+.contenidoAside .btnCarro {
+    width: 280px;
+    margin: 20px auto 40px auto;
+    background: #5CCB5F;
+    border: none;
+    padding: 10px;
+    border-radius: 20px;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.contenidoAside .btnCarro:hover {
+    background: #efa229;
+    color: #fff;
+}
+
+.contenidoAside .pregunta {
+    margin-top: 30px;
+    font-size: 14px;
+    color: #5CCB5F;
+}

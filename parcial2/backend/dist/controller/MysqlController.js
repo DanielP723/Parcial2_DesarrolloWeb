@@ -232,6 +232,26 @@ class MysqlController {
                 }
             });
         };
+        this.deleteProductCart = (req, res) => {
+            const id = parseInt(req.body.id);
+            const token = req.body.token;
+            if (!this.verifyToken(token)) {
+                return res.json({ 'error': true, message: 'e104' });
+            }
+            if (!id) {
+                return res.json({ 'error': true, message: 'e101' });
+            }
+            let decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+            this.model.deleteProductCart(id, decodedToken.email, (error, rows) => {
+                if (error) {
+                    console.error(error);
+                    return res.json({ 'error': true, message: 'e101' });
+                }
+                if (rows) {
+                    return res.json({ 'error': false, message: 'Success delete product' });
+                }
+            });
+        };
         this.moviesModel = new MysqlModel_1.default();
         this.model = new MysqlModel_1.default();
     }

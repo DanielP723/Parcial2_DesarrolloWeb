@@ -17,6 +17,7 @@ export class IndexView {
     public idsCart: any;
     // Btn 'Realizar pedido'
     public btnBuy: any;
+    public btnGoCart: any;
     public totalPrice: any;
 
     constructor() {
@@ -36,6 +37,7 @@ export class IndexView {
         this.btnFavorites = this.getElement('btnMisFavoritos');
         this.floatCart = this.getElement('carroCompras');
         this.btnBuy = this.getElement('btn2');
+        this.btnGoCart = this.getElement('btn');
     }
 
     public getElement = (selector: string): HTMLElement | null => document.getElementById(selector);
@@ -105,7 +107,7 @@ export class IndexView {
                 "<input type='number' class='cantidadPCarro' value='" + cart[i].amount + "' name='cantidadPCarro' id='cantidadPCarro" + cart[i].ID + "'  min='0' max='100'>" +
                 "</div>" +
                 "<p class='precioPCarro' id='precioPCarro'>" + cart[i].price + "$</p>" +
-                "<i id='quitarPCarro' onclick='quitarDelCarrito(" + i + ")' class='fa-solid fa-trash quitarProducto'></i>" +
+                "<i id='quitarCarro"+cart[i].ID+"' class='fa-solid fa-trash quitarProducto'></i>" +
                 "</div>";
                 this.idsCart.push(cart[i].ID);
             subTotal += (parseInt(cart[i].amount) * parseFloat(cart[i].price));
@@ -122,18 +124,19 @@ export class IndexView {
             "</div>";
         if (subTotal + (19 * subTotal / 100) > 45) {
             html += "<p id='alerta'>Envío gratuito.</p>" +
-                "<li class='btnsCarro'><a id='btn' href='./carro.html' target='_blank'>Ir al carrito</a></li>" +
+                "<li class='btnsCarro' id='btn'><a href='#'>Ir al carrito</a></li>" +
                 "<li class='btnsCarro' id='btn2'><a href='#' >Realizar pedido</a></li>";
         } else if (precioTotal == 0) {
-            html += "<li class='btnsCarro'><a id='btn' href='./carro.html' target='_blank'>Ir al carrito</a></li>" +
+            html += "<li class='btnsCarro' id='btn'><a href='#'>Ir al carrito</a></li>" +
                 "<li class='btnsCarro' id='btn2'><a href='#' >Realizar pedido</a></li>";
         } else {
             html += "<p id='alerta'>Te faltan " + (45 - precioTotal).toFixed(2) + "$ para el envío gratuito.</p>" +
-                "<li class='btnsCarro'><a id='btn' href='./carro.html' target='_blank'>Ir al carrito</a></li>" +
+                "<li class='btnsCarro' id='btn'><a href='#'>Ir al carrito</a></li>" +
                 "<li class='btnsCarro' id='btn2'><a href='#' >Realizar pedido</a></li>";
         }
         this.floatCart.innerHTML = html;
         this.btnBuy = this.getElement('btn2');
+        this.btnGoCart = this.getElement('btn');
         this.totalPrice = this.getElement('precioTotal');
     }
 

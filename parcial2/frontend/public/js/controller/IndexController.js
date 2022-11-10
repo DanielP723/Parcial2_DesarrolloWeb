@@ -67,13 +67,16 @@ export class IndexController {
                 yield this.model.getCartId(email).then(datos => rows = datos);
                 if (rows.error == true) {
                     if (rows.message == 'e104') {
-                        return;
+                        this.model.cart = [];
+                        this.view.showFloatCart(this.model.cart);
+                        return this.addMethodsBtnsCart();
                     }
                 }
                 if (rows) {
                     if (rows.length == 0) {
                         this.model.cart = [];
-                        return this.view.showFloatCart(this.model.cart);
+                        this.view.showFloatCart(this.model.cart);
+                        return this.addMethodsBtnsCart();
                     }
                     let rows2 = yield this.model.showCart(rows);
                     if (rows2) {
@@ -95,7 +98,8 @@ export class IndexController {
                 }
             }
             this.view.showFloatCart(this.model.cart);
-            this.addMethodBuy();
+            this.addMethodsBtnsCart();
+            this.addMethodsDeleteCart();
         });
         this.addToFavorites = (id) => __awaiter(this, void 0, void 0, function* () {
             if (id && id > 0 && id <= this.model.lengthAllProducts) {
@@ -143,8 +147,7 @@ export class IndexController {
             window.location.reload();
         });
     }
-    // Añadir evento para compra
-    addMethodBuy() {
+    addMethodsBtnsCart() {
         this.view.btnBuy.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
             let token = localStorage.getItem('token');
             if (token && token.length > 0) {
@@ -171,6 +174,25 @@ export class IndexController {
             }
             else {
                 alert('Debes iniciar sesión para poder realizar un pedido');
+            }
+        }));
+        this.view.btnGoCart.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
+            let token = localStorage.getItem('token');
+            if (token && token.length > 0) {
+                let response = yield this.model.isLogged(token);
+                if (response) {
+                    if (response.error == false) {
+                        return window.open('./cart.html', '_self');
+                    }
+                    if (response.error == true) {
+                        return alert('No has iniciado sesión');
+                    }
+                    return alert('Error. No se puede abrir el carrito');
+                }
+                return alert('Error. No se puede abrir el carrito');
+            }
+            else {
+                return alert('No has iniciado sesión');
             }
         }));
     }
@@ -298,6 +320,29 @@ export class IndexController {
             if (temp) {
                 let id = this.view.ids[i];
                 temp.addEventListener('click', () => this.addToCart(id));
+            }
+        }
+    }
+    addMethodsDeleteCart() {
+        for (let i = 0; i < this.view.idsCart.length; i++) {
+            let id = this.view.idsCart[i];
+            let temp = this.view.getElement('quitarCarro' + id);
+            if (temp) {
+                temp.addEventListener('click', () => __awaiter(this, void 0, void 0, function* () {
+                    let email = localStorage.getItem('token');
+                    if (email && email.length != 0) {
+                        let response = yield this.model.deleteProductCart(id, email);
+                        if (response) {
+                            if (response.error == false) {
+                                return this.showCart();
+                            }
+                            else {
+                                return alert('Error. No se pudo eliminar el producto del carrito');
+                            }
+                        }
+                        return alert('Error. No se pudo eliminar el producto del carrito');
+                    }
+                }));
             }
         }
     }

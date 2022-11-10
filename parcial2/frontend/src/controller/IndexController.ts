@@ -25,8 +25,7 @@ export class IndexController {
         this.addMethodShowFavorites();
     }
 
-    // Añadir evento para compra
-    addMethodBuy() {
+    addMethodsBtnsCart() {
         this.view.btnBuy.addEventListener('click', async () => {
             let token = localStorage.getItem('token');
             if (token && token.length > 0) {
@@ -50,9 +49,27 @@ export class IndexController {
                     }
                     return this.showCart();
                 }
-
             } else {
                 alert('Debes iniciar sesión para poder realizar un pedido');
+            }
+        });
+
+        this.view.btnGoCart.addEventListener('click', async () => {
+            let token = localStorage.getItem('token');
+            if (token && token.length > 0) {
+                let response = await this.model.isLogged(token);
+                if (response) {
+                    if (response.error == false) {
+                        return window.open('./cart.html', '_self');
+                    }
+                    if(response.error == true){
+                        return alert('No has iniciado sesión');
+                    }
+                    return alert('Error. No se puede abrir el carrito');
+                }
+                return alert('Error. No se puede abrir el carrito');
+            } else {
+                return alert('No has iniciado sesión');
             }
         });
     }
@@ -236,13 +253,16 @@ export class IndexController {
             await this.model.getCartId(email).then(datos => rows = datos);
             if (rows.error == true) {
                 if (rows.message == 'e104') {
-                    return;
+                    this.model.cart = [];
+                    this.view.showFloatCart(this.model.cart);
+                    return this.addMethodsBtnsCart();
                 }
             }
             if (rows) {
                 if (rows.length == 0) {
                     this.model.cart = [];
-                    return this.view.showFloatCart(this.model.cart);
+                    this.view.showFloatCart(this.model.cart);
+                    return this.addMethodsBtnsCart();
                 }
                 let rows2: any = await this.model.showCart(rows);
                 if (rows2) {
@@ -263,7 +283,31 @@ export class IndexController {
             }
         }
         this.view.showFloatCart(this.model.cart);
-        this.addMethodBuy();
+        this.addMethodsBtnsCart();
+        this.addMethodsDeleteCart();
+    }
+
+    addMethodsDeleteCart() {
+        for (let i = 0; i < this.view.idsCart.length; i++) {
+            let id = this.view.idsCart[i]
+            let temp = this.view.getElement('quitarCarro' + id);
+            if (temp) {
+                temp.addEventListener('click', async () => {
+                    let email = localStorage.getItem('token');
+                    if (email && email.length != 0) {
+                        let response = await this.model.deleteProductCart(id, email);
+                        if (response) {
+                            if (response.error == false) {
+                                return this.showCart();
+                            } else {
+                                return alert('Error. No se pudo eliminar el producto del carrito');
+                            }
+                        }
+                        return alert('Error. No se pudo eliminar el producto del carrito');
+                    }
+                })
+            }
+        }
     }
 
     addToFavorites = async (id: number) => {
