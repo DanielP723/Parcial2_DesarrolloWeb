@@ -88,6 +88,32 @@ export default class MysqlController {
         }
     }
 
+    public getCartId = (req: Request, res: Response) => {
+        const token = req.body.token;
+        if (token) {
+            let decodedToken: any;
+            try {
+                decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+            } catch {
+                return res.json({ 'error': true, message: 'e104' });
+            }
+            if (!decodedToken.email) {
+                return res.json({ 'error': true, message: 'e104' });
+            }
+            this.model.getCartId(decodedToken.email, (error: any, rows: any) => {
+                if (error) {
+                    console.error(error);
+                    return res.json({ 'error': true, message: 'e101' });
+                }
+                if (rows) {
+                    return res.json(rows);
+                }
+            });
+        } else {
+            console.log('Token Inválido')
+            return res.json({ 'error': true, message: 'e104' });
+        }
+    }
     public addToCart = (req: Request, res: Response) => {
         const id = parseInt(req.body.id);
         const token = req.body.token;
@@ -115,7 +141,7 @@ export default class MysqlController {
                             console.log(error);
                             return res.json({ 'error': true, message: 'e101' });
                         }
-                        if (rows.length > 0) {
+                        if (rows) {
                             return res.json({ 'error': false, message: 'Success add to cart' });
                         }
                     })

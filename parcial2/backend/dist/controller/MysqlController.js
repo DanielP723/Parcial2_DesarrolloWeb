@@ -81,6 +81,34 @@ class MysqlController {
                 return res.json({ 'error': true, message: 'e104' });
             }
         };
+        this.getCartId = (req, res) => {
+            const token = req.body.token;
+            if (token) {
+                let decodedToken;
+                try {
+                    decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+                }
+                catch (_a) {
+                    return res.json({ 'error': true, message: 'e104' });
+                }
+                if (!decodedToken.email) {
+                    return res.json({ 'error': true, message: 'e104' });
+                }
+                this.model.getCartId(decodedToken.email, (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        return res.json({ 'error': true, message: 'e101' });
+                    }
+                    if (rows) {
+                        return res.json(rows);
+                    }
+                });
+            }
+            else {
+                console.log('Token Inválido');
+                return res.json({ 'error': true, message: 'e104' });
+            }
+        };
         this.addToCart = (req, res) => {
             const id = parseInt(req.body.id);
             const token = req.body.token;
@@ -109,7 +137,7 @@ class MysqlController {
                                 console.log(error);
                                 return res.json({ 'error': true, message: 'e101' });
                             }
-                            if (rows.length > 0) {
+                            if (rows) {
                                 return res.json({ 'error': false, message: 'Success add to cart' });
                             }
                         });

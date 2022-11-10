@@ -27,18 +27,18 @@ export class IndexController {
 
     isLogged = async () => {
         let token = localStorage.getItem('token');
-        if(token && token.length > 0){
+        if (token && token.length > 0) {
             let response = await this.model.isLogged(token);
-            if(response.error == false){
+            if (response.error == false) {
                 await this.model.getFavoritesId(token)
                     .then(datos => {
-                        if(datos.error == true){
+                        if (datos.error == true) {
                             return;
                         }
-                        if(datos){
-                            if(datos.length == 0){
+                        if (datos) {
+                            if (datos.length == 0) {
                                 this.model.favorites = [];
-                            }else{
+                            } else {
                                 for (let i = 0; i < datos.length; i++) {
                                     this.model.favorites.push(datos[i].id_product);
                                 }
@@ -52,18 +52,18 @@ export class IndexController {
     addMethodShowFavorites() {
         this.view.btnFavorites.addEventListener('click', async () => {
             let email = localStorage.getItem('token');
-            if(email && email.length > 0){
+            if (email && email.length > 0) {
                 let rows: any;
                 await this.model.getFavoritesId(email).then(datos => rows = datos);
-                if(rows.error == true){
-                    if(rows.message == 'e104'){
+                if (rows.error == true) {
+                    if (rows.message == 'e104') {
                         return alert('Debes iniciar sesión para poder ver tus favoritos');
-                    }else{
+                    } else {
                         return alert('Error al ver favoritos');
                     }
                 }
-                if(rows){
-                    if(rows.length == 0){
+                if (rows) {
+                    if (rows.length == 0) {
                         this.model.products = [];
                         this.model.pages = 0;
                         this.model.currentPage = 1;
@@ -72,7 +72,7 @@ export class IndexController {
                     await this.model.showFavorites(rows);
                     this.showProducts();
                 }
-            }else{
+            } else {
                 return alert('Debes iniciar sesión para poder ver tus favoritos');
             }
         })
@@ -168,7 +168,7 @@ export class IndexController {
         }
     }
 
-    addMethodAddCart(){
+    addMethodAddCart() {
         for (let i = 0; i < this.view.ids.length; i++) {
             let temp: any;
             temp = this.view.getElement('agregar' + this.view.ids[i]);
@@ -184,17 +184,53 @@ export class IndexController {
             let email = localStorage.getItem('token');
             if (email && email.length != 0) {
                 let response: any = await this.model.addToCart(id, email);
-                if(response.error == true){
-                    if(response.message == 'e104'){
+                if (response.error == true) {
+                    if (response.message == 'e104') {
                         return alert('Debes iniciar sesión para poder agregar al carrito');
                     }
                     return alert('Error al agregar al carrito');
                 }
-                // Se debe buscar los ids de los productos añadidos al carrito
-            }else{
+
+
+            } else {
                 return alert('Debes iniciar sesión para poder agregar al carrito');
             }
         }
+    }
+
+    showCart = async () => {
+        let email = localStorage.getItem('token');
+        if (email && email.length > 0) {
+            let rows: any;
+            await this.model.getCartId(email).then(datos => rows = datos);
+            if (rows.error == true) {
+                if (rows.message == 'e104') {
+                    return;
+                }
+            }
+            if (rows) {
+                if (rows.length == 0) {
+                    return this.model.cart = [];
+                }
+                let rows2: any = await this.model.showCart(rows);
+                if (rows2) {
+                    if (rows2.length > 0) {
+                        this.model.cart = [];
+                        for (let i = 0; i < rows.length; i++) {
+                            for (let j = 0; j < rows2.length; j++) {
+                                if (rows[i].id_product == rows2[j].ID) {
+                                    this.model.cart.push({ID: rows2[j].ID, amount: rows[i].amount, brand: rows2[j].brand, description: rows2[j].description, discount: rows2[j].discount, image: rows2[j].image, name: rows2[j].name, price: rows2[j].price});
+                                    break;
+                                }
+                            }
+                        }
+                    }else{
+                        this.model.cart = [];
+                    }
+                }
+            }
+        }
+        this.view.showFloatCart(this.model.cart);
     }
 
     addToFavorites = async (id: number) => {
@@ -205,10 +241,10 @@ export class IndexController {
                 if (response) {
                     let temp: any;
                     temp = this.view.getElement('corazon' + id);
-                    if(response.error == true){
-                        if(response.message == 'e104'){
+                    if (response.error == true) {
+                        if (response.message == 'e104') {
                             return alert('Debes iniciar sesión para poder agregar a favoritos');
-                        }else{
+                        } else {
                             return alert('Error al agregar a favoritos');
                         }
                     }
@@ -220,7 +256,7 @@ export class IndexController {
                         temp.classList.add('fa-regular');
                     }
                 }
-            }else{
+            } else {
                 return alert('Debes iniciar sesión para poder agregar a favoritos');
             }
         }
@@ -228,6 +264,7 @@ export class IndexController {
 
     showProducts = async () => {
         await this.isLogged();
+        this.showCart();
         this.view.showProducts(this.model.products, this.model.favorites, this.model.currentPage);
         this.view.pagination(this.model.pages, this.model.currentPage);
         this.addMethodFavorites();

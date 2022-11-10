@@ -13,6 +13,8 @@ export class IndexView {
     // Heart icons list for add to favorites
     public hearts: any;
     public btnFavorites: any;
+    public floatCart: any;
+    public idsCart: any;
 
     constructor() {
         this.container = this.getElement('container');
@@ -22,20 +24,21 @@ export class IndexView {
         // Search Elements
         this.searchElements = [this.getElement('btnBuscar'), this.getElement('busqueda')];
         // Filter Price Elements
-        this.filterElements = [this.getElement('lblMinPrice'), this.getElement('lblMaxPrice'), 
+        this.filterElements = [this.getElement('lblMinPrice'), this.getElement('lblMaxPrice'),
         this.getElement('filtrarPrecio'), this.getElement('range_min'), this.getElement('range_max'),
         document.querySelectorAll(".range-input input"), document.querySelector(".slider .progress"), 5];
         this.logo = this.getElement('imgLogo');
         this.ids = [];
         this.hearts = [];
         this.btnFavorites = this.getElement('btnMisFavoritos');
+        this.floatCart = this.getElement('carroCompras');
     }
 
     public getElement = (selector: string): HTMLElement | null => document.getElementById(selector);
 
     showProducts(products: any, favorites: any, page: number) {
         this.ids = [];
-        if(products.length == 0){
+        if (products.length == 0) {
             this.container.innerHTML = '';
             return;
         }
@@ -50,9 +53,9 @@ export class IndexView {
             for (let j = 0; j < 4; j++) {
                 html += "<div class='col-3 producto'>" + //onmouseover='nombreCompleto("+productos[index][0]+")' onmouseout='nombreCorto("+productos[index][0]+")
                     "     <div class='imagen my-3'>";
-                if(favorites.includes(parseInt(products[index].ID))){
+                if (favorites.includes(parseInt(products[index].ID))) {
                     html += "<i class='fa-solid fa-heart' id='corazon" + products[index].ID + "'></i>";
-                }else{
+                } else {
                     html += "<i class='fa-regular fa-heart' id='corazon" + products[index].ID + "'></i>";
                 }
                 this.ids.push(products[index].ID);
@@ -80,6 +83,52 @@ export class IndexView {
             html += "</div>";
         }
         this.container.innerHTML = html;
+    }
+
+    showFloatCart(cart: any) {
+        this.floatCart.innerHTML = "";
+        let html = "<div class='productosCarro' id='productosCarro'>";
+        let subTotal = 0.0;
+        this.idsCart = [];
+        for (let i = 0; i < cart.length; i++) {
+            html += "<div class='item' id='item'>" +
+                "<div class='imagenPCarro'>" +
+                "<img src='" + cart[i].image + "' alt='' height='100'>" +
+                "</div>" +
+                "<div class='informacionPCarro'>" +
+                "<h4 class='titulo'>" + cart[i].name + "</h4>" +
+                "<label for='cantidadPCarro' id='cant'>Cantidad</label>" +
+                "<input type='number' class='cantidadPCarro' value='" + cart[i].amount + "' name='cantidadPCarro' id='cantidadPCarro" + cart[i].ID + "'  min='0' max='100'>" +
+                "</div>" +
+                "<p class='precioPCarro' id='precioPCarro'>" + cart[i].price + "$</p>" +
+                "<i id='quitarPCarro' onclick='quitarDelCarrito(" + i + ")' class='fa-solid fa-trash quitarProducto'></i>" +
+                "</div>";
+                this.idsCart.push(cart[i].ID);
+            subTotal += (parseInt(cart[i].amount) * parseFloat(cart[i].price));
+        }
+        html += "</div>" +
+            "<div class='subtotalCarro'>" +
+            "<p id='texto'>Subtotal</p>" +
+            "<p id='precio'>" + subTotal.toFixed(2) + "$</p>" +
+            "</div>" +
+            "<div class='totalCarro'>" +
+            "<p><b>TOTAL </b><span><b>(IVA incluido)</b></span></p>";
+        let precioTotal: number = subTotal + parseFloat((19 * subTotal / 100).toFixed(2));
+        html += "<p id='precioTotal' ><b>" + precioTotal + "$</b></p>" +
+            "</div>";
+        if (subTotal + (19 * subTotal / 100) > 45) {
+            html += "<p id='alerta'>Envío gratuito.</p>" +
+                "<li class='btnsCarro'><a id='btn' href='./carro.html' target='_blank'>Ir al carrito</a></li>" +
+                "<li class='btnsCarro'><a id='btn2' href='#' >Realizar pedido</a></li>";
+        } else if (precioTotal == 0) {
+            html += "<li class='btnsCarro'><a id='btn' href='./carro.html' target='_blank'>Ir al carrito</a></li>" +
+                "<li class='btnsCarro'><a id='btn2' href='#' >Realizar pedido</a></li>";
+        } else {
+            html += "<p id='alerta'>Te faltan " + (45 - precioTotal).toFixed(2) + "$ para el envío gratuito.</p>" +
+                "<li class='btnsCarro'><a id='btn' href='./carro.html' target='_blank'>Ir al carrito</a></li>" +
+                "<li class='btnsCarro'><a id='btn2' href='#' >Realizar pedido</a></li>";
+        }
+        this.floatCart.innerHTML = html;
     }
 
     pagination(pages: number, currentPage: number) {

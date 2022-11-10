@@ -31,7 +31,15 @@ class MongoController {
         let ids = req.body.ids;
         if (ids && ids.length > 0) {
             this.model.showFavorites(ids, (products: any) => {
-                console.log(products);
+                res.json(products);
+            });
+        }
+    }
+
+    public getProductsCart = (req: Request, res: Response) => {
+        let ids = req.body.ids;
+        if (ids && ids.length > 0) {
+            this.model.showFavorites(ids, (products: any) => {
                 res.json(products);
             });
         }

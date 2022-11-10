@@ -9,6 +9,7 @@ export class IndexModel {
     public maxPrice: number;
     public lengthAllProducts: number;
     public favorites: any = [];
+    public cart: any = [];
 
     constructor() {
         this.pages = 0;
@@ -109,7 +110,19 @@ export class IndexModel {
                 "Content-type": "application/json"
             }
         });
-        let res = await response.json();console.log(res);
+        let res = await response.json();
+        return res;
+    }
+
+    getCartId = async (token: any) => {
+        let response = await fetch(`${this.URI}api/getCartId`, {
+            method: 'POST',
+            body: JSON.stringify({ token: token }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        });
+        let res = response.json();
         return res;
     }
 
@@ -142,5 +155,18 @@ export class IndexModel {
             .then(() => this.pages = Math.ceil(this.products.length / 12))
             .then(() => this.currentPage = 1)
             .catch(err => console.log(err));
+    }
+
+    // ME Falta arreglar esto. cambiar la dirección del fetch
+    showCart = async (ids: any) => {
+        let response = await fetch(`${this.URI}api/getFavorites`, {
+            method: 'POST',
+            body: JSON.stringify({ ids: ids }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        });
+        let res = response.json();
+        return res;
     }
 }

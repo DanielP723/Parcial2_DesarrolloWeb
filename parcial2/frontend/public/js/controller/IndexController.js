@@ -53,12 +53,46 @@ export class IndexController {
                         }
                         return alert('Error al agregar al carrito');
                     }
-                    // Se debe buscar los ids de los productos añadidos al carrito
                 }
                 else {
                     return alert('Debes iniciar sesión para poder agregar al carrito');
                 }
             }
+        });
+        this.showCart = () => __awaiter(this, void 0, void 0, function* () {
+            let email = localStorage.getItem('token');
+            if (email && email.length > 0) {
+                let rows;
+                yield this.model.getCartId(email).then(datos => rows = datos);
+                if (rows.error == true) {
+                    if (rows.message == 'e104') {
+                        return;
+                    }
+                }
+                if (rows) {
+                    if (rows.length == 0) {
+                        return this.model.cart = [];
+                    }
+                    let rows2 = yield this.model.showCart(rows);
+                    if (rows2) {
+                        if (rows2.length > 0) {
+                            this.model.cart = [];
+                            for (let i = 0; i < rows.length; i++) {
+                                for (let j = 0; j < rows2.length; j++) {
+                                    if (rows[i].id_product == rows2[j].ID) {
+                                        this.model.cart.push({ ID: rows2[j].ID, amount: rows[i].amount, brand: rows2[j].brand, description: rows2[j].description, discount: rows2[j].discount, image: rows2[j].image, name: rows2[j].name, price: rows2[j].price });
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            this.model.cart = [];
+                        }
+                    }
+                }
+            }
+            this.view.showFloatCart(this.model.cart);
         });
         this.addToFavorites = (id) => __awaiter(this, void 0, void 0, function* () {
             if (id && id > 0 && id <= this.model.lengthAllProducts) {
@@ -93,6 +127,7 @@ export class IndexController {
         });
         this.showProducts = () => __awaiter(this, void 0, void 0, function* () {
             yield this.isLogged();
+            this.showCart();
             this.view.showProducts(this.model.products, this.model.favorites, this.model.currentPage);
             this.view.pagination(this.model.pages, this.model.currentPage);
             this.addMethodFavorites();
