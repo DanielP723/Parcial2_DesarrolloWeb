@@ -97,7 +97,7 @@ export class IndexView {
             "<div class='totalCarro'>" +
             "<p><b>TOTAL </b><span><b>(IVA incluido)</b></span></p>";
         let precioTotal = subTotal + parseFloat((19 * subTotal / 100).toFixed(2));
-        html += "<p id='precioTotal' ><b>" + precioTotal + "$</b></p>" +
+        html += "<p><b id='precioTotal'>" + precioTotal.toFixed(2) + "$</b></p>" +
             "</div>";
         if (subTotal + (19 * subTotal / 100) > 45) {
             html += "<p id='alerta'>Envío gratuito.</p>" +
@@ -115,6 +115,7 @@ export class IndexView {
         }
         this.floatCart.innerHTML = html;
         this.btnBuy = this.getElement('btn2');
+        this.totalPrice = this.getElement('precioTotal');
     }
     pagination(pages, currentPage) {
         let index = currentPage;

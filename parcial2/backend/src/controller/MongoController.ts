@@ -27,7 +27,7 @@ class MongoController {
         });
     }
 
-    public showFavorites = (req: Request, res: Response) => {
+    public getProductsById = (req: Request, res: Response) => {
         let ids = req.body.ids;
         if (ids && ids.length > 0) {
             this.model.showFavorites(ids, (products: any) => {

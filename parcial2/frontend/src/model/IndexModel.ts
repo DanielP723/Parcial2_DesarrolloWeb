@@ -139,7 +139,7 @@ export class IndexModel {
     }
 
     showFavorites = async (ids: any) => {
-        await fetch(`${this.URI}api/getFavorites`, {
+        await fetch(`${this.URI}api/getProductsById`, {
             method: 'POST',
             body: JSON.stringify({ ids: ids }),
             headers: {
@@ -157,9 +157,11 @@ export class IndexModel {
             .catch(err => console.log(err));
     }
 
+
+
     // ME Falta arreglar esto. cambiar la dirección del fetch
     showCart = async (ids: any) => {
-        let response = await fetch(`${this.URI}api/getFavorites`, {
+        let response = await fetch(`${this.URI}api/getProductsById`, {
             method: 'POST',
             body: JSON.stringify({ ids: ids }),
             headers: {
@@ -167,6 +169,18 @@ export class IndexModel {
             }
         });
         let res = response.json();
+        return res;
+    }
+
+    makeOrder = async (token: string, totalPrice: number) => {
+        let response = await fetch(`${this.URI}api/makeOrder`, {
+            method: 'POST',
+            body: JSON.stringify({ token: token, cart: this.cart, totalPrice: totalPrice }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        });
+        let res = await response.json();
         return res;
     }
 }

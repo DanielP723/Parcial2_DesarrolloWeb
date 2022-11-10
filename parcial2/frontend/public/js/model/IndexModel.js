@@ -117,7 +117,7 @@ export class IndexModel {
             return res;
         });
         this.showFavorites = (ids) => __awaiter(this, void 0, void 0, function* () {
-            yield fetch(`${this.URI}api/getFavorites`, {
+            yield fetch(`${this.URI}api/getProductsById`, {
                 method: 'POST',
                 body: JSON.stringify({ ids: ids }),
                 headers: {
@@ -136,7 +136,7 @@ export class IndexModel {
         });
         // ME Falta arreglar esto. cambiar la dirección del fetch
         this.showCart = (ids) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/getFavorites`, {
+            let response = yield fetch(`${this.URI}api/getProductsById`, {
                 method: 'POST',
                 body: JSON.stringify({ ids: ids }),
                 headers: {
@@ -144,6 +144,17 @@ export class IndexModel {
                 }
             });
             let res = response.json();
+            return res;
+        });
+        this.makeOrder = (token, totalPrice) => __awaiter(this, void 0, void 0, function* () {
+            let response = yield fetch(`${this.URI}api/makeOrder`, {
+                method: 'POST',
+                body: JSON.stringify({ token: token, cart: this.cart, totalPrice: totalPrice }),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            });
+            let res = yield response.json();
             return res;
         });
         this.pages = 0;

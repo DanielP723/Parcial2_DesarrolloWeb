@@ -55,147 +55,103 @@ class MysqlController {
         };
         this.showFavorites = (req, res) => {
             const token = req.body.token;
-            if (token) {
-                let decodedToken;
-                try {
-                    decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
-                }
-                catch (_a) {
-                    return res.json({ 'error': true, message: 'e104' });
-                }
-                if (!decodedToken.email) {
-                    return res.json({ 'error': true, message: 'e104' });
-                }
-                this.model.showFavorites(decodedToken.email, (error, rows) => {
-                    if (error) {
-                        console.error(error);
-                        return res.json({ 'error': true, message: 'e101' });
-                    }
-                    if (rows) {
-                        return res.json(rows);
-                    }
-                });
-            }
-            else {
-                console.log('Token Inválido');
+            if (!this.verifyToken(token)) {
                 return res.json({ 'error': true, message: 'e104' });
             }
+            let decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+            this.model.showFavorites(decodedToken.email, (error, rows) => {
+                if (error) {
+                    console.error(error);
+                    return res.json({ 'error': true, message: 'e101' });
+                }
+                if (rows) {
+                    return res.json(rows);
+                }
+            });
         };
         this.getCartId = (req, res) => {
             const token = req.body.token;
-            if (token) {
-                let decodedToken;
-                try {
-                    decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
-                }
-                catch (_a) {
-                    return res.json({ 'error': true, message: 'e104' });
-                }
-                if (!decodedToken.email) {
-                    return res.json({ 'error': true, message: 'e104' });
-                }
-                this.model.getCartId(decodedToken.email, (error, rows) => {
-                    if (error) {
-                        console.error(error);
-                        return res.json({ 'error': true, message: 'e101' });
-                    }
-                    if (rows) {
-                        return res.json(rows);
-                    }
-                });
-            }
-            else {
-                console.log('Token Inválido');
+            if (!this.verifyToken(token)) {
                 return res.json({ 'error': true, message: 'e104' });
             }
+            let decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+            this.model.getCartId(decodedToken.email, (error, rows) => {
+                if (error) {
+                    console.error(error);
+                    return res.json({ 'error': true, message: 'e101' });
+                }
+                if (rows) {
+                    return res.json(rows);
+                }
+            });
         };
         this.addToCart = (req, res) => {
             const id = parseInt(req.body.id);
             const token = req.body.token;
-            if (token) {
-                let decodedToken;
-                try {
-                    decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
-                }
-                catch (_a) {
-                    return res.json({ 'error': true, message: 'e104' });
-                }
-                if (!decodedToken.email) {
-                    return res.json({ 'error': true, message: 'e104' });
-                }
-                if (!id) {
+            if (!this.verifyToken(token)) {
+                return res.json({ 'error': true, message: 'e104' });
+            }
+            if (!id) {
+                return res.json({ 'error': true, message: 'e101' });
+            }
+            let decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+            this.model.searchCart(id, decodedToken.email, (error, rows) => {
+                if (error) {
+                    console.error(error);
                     return res.json({ 'error': true, message: 'e101' });
                 }
-                this.model.searchCart(id, decodedToken.email, (error, rows) => {
-                    if (error) {
-                        console.error(error);
-                        return res.json({ 'error': true, message: 'e101' });
-                    }
-                    if (rows.length == 0) {
-                        this.model.insertToCart(id, decodedToken.email, (error, rows) => {
-                            if (error) {
-                                console.log(error);
-                                return res.json({ 'error': true, message: 'e101' });
-                            }
-                            if (rows) {
-                                return res.json({ 'error': false, message: 'Success add to cart' });
-                            }
-                        });
-                    }
-                    if (rows.length > 0) {
-                        this.model.addToCart(id, 1, decodedToken.email, (error, rows) => {
-                            if (error) {
-                                console.log(error);
-                                return res.json({ 'error': true, message: 'e101' });
-                            }
-                            if (rows.length > 0) {
-                                return res.json({ 'error': false, message: 'Success add to cart' });
-                            }
-                        });
-                    }
-                });
-            }
+                if (rows.length == 0) {
+                    this.model.insertToCart(id, decodedToken.email, (error, rows) => {
+                        if (error) {
+                            console.log(error);
+                            return res.json({ 'error': true, message: 'e101' });
+                        }
+                        if (rows) {
+                            return res.json({ 'error': false, message: 'Success add to cart' });
+                        }
+                    });
+                }
+                if (rows.length > 0) {
+                    this.model.addToCart(id, 1, decodedToken.email, (error, rows) => {
+                        if (error) {
+                            console.log(error);
+                            return res.json({ 'error': true, message: 'e101' });
+                        }
+                        if (rows.length > 0) {
+                            return res.json({ 'error': false, message: 'Success add to cart' });
+                        }
+                    });
+                }
+            });
         };
         this.searchFavorites = (req, res) => {
             const id = parseInt(req.body.id);
             const token = req.body.token;
-            if (token) {
-                let decodedToken;
-                try {
-                    decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
-                }
-                catch (_a) {
-                    return res.json({ 'error': true, message: 'e104' });
-                }
-                if (!decodedToken.email) {
-                    return res.json({ 'error': true, message: 'e104' });
-                }
-                if (!id) {
-                    return res.json({ 'error': true, message: 'e101' });
-                }
-                this.model.searchFavorites(id, decodedToken.email, (error, rows) => {
-                    if (error) {
-                        console.error(error);
-                        return res.json({ 'error': true, message: 'e101' });
-                    }
-                    if (rows.length > 0) {
-                        let rows2 = this.deleteFavorites(id, decodedToken.email, res);
-                        if (rows2) {
-                            return res.json([{ 'error': false, message: 'Delete favorites success' }]);
-                        }
-                    }
-                    else {
-                        let rows2 = this.addFavorites(id, decodedToken.email, res);
-                        if (rows2) {
-                            return res.json([{ 'error': false, message: 'Add favorites success' }]);
-                        }
-                    }
-                });
-            }
-            else {
-                console.log('Token Inválido');
+            if (!this.verifyToken(token)) {
                 return res.json({ 'error': true, message: 'e104' });
             }
+            if (!id) {
+                return res.json({ 'error': true, message: 'e101' });
+            }
+            let decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+            this.model.searchFavorites(id, decodedToken.email, (error, rows) => {
+                if (error) {
+                    console.error(error);
+                    return res.json({ 'error': true, message: 'e101' });
+                }
+                if (rows.length > 0) {
+                    let rows2 = this.deleteFavorites(id, decodedToken.email, res);
+                    if (rows2) {
+                        return res.json([{ 'error': false, message: 'Delete favorites success' }]);
+                    }
+                }
+                else {
+                    let rows2 = this.addFavorites(id, decodedToken.email, res);
+                    if (rows2) {
+                        return res.json([{ 'error': false, message: 'Add favorites success' }]);
+                    }
+                }
+            });
         };
         this.deleteFavorites = (id, email, res) => {
             if (id && email) {
@@ -256,8 +212,46 @@ class MysqlController {
                 res.json({ error: true, message: 'e101' });
             }
         };
+        this.makeOrder = (req, res) => {
+            const { token, cart, totalPrice } = req.body;
+            if (!this.verifyToken(token)) {
+                return res.json({ 'error': true, message: 'e104' });
+            }
+            if (!cart || cart.length == 0 || totalPrice == 0) {
+                return res.json({ 'error': true, message: 'e101' });
+            }
+            let decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+            this.model.makeOrder(decodedToken.email, totalPrice, (error, rows) => {
+                if (error) {
+                    console.log(error);
+                    return res.json({ error: true, message: 'e101' });
+                }
+                if (rows) {
+                    console.log(rows);
+                    return res.json(rows);
+                }
+            });
+        };
         this.moviesModel = new MysqlModel_1.default();
         this.model = new MysqlModel_1.default();
+    }
+    verifyToken(token) {
+        if (token) {
+            let decodedToken;
+            try {
+                decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+            }
+            catch (_a) {
+                return false;
+            }
+            if (!decodedToken.email) {
+                return false;
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
 exports.default = MysqlController;

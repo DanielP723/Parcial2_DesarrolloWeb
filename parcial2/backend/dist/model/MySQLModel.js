@@ -89,5 +89,12 @@ class MysqlModel {
             fn(error, rows);
         });
     }
+    makeOrder(email, totalPrice, fn) {
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`CALL ??('${email}', ${totalPrice});`, ['makeOrder']);
+        this.mysqlDBC.pool.query(statament, (error, rows) => {
+            fn(error, rows);
+        });
+    }
 }
 exports.default = MysqlModel;

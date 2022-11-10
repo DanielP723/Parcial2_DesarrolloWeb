@@ -99,4 +99,13 @@ export default class MysqlModel {
             fn(error, rows);
         });
     }
+
+    public makeOrder(email: string, totalPrice: number, fn: Function){
+        this.mysqlDBC.connection();
+        const statament = this.mysqlDBC.statement(`CALL ??('${email}', ${totalPrice});`, 
+        ['makeOrder']);
+        this.mysqlDBC.pool.query(statament, (error: any, rows: any) => {
+            fn(error, rows);
+        });
+    }
 }

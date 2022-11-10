@@ -25,9 +25,35 @@ export class IndexController {
         this.addMethodShowFavorites();
     }
 
-    addMethodBuy(){
-        this.view.btnBuy.addEventListener('click', () => {
-            alert('prueba');
+    // Añadir evento para compra
+    addMethodBuy() {
+        this.view.btnBuy.addEventListener('click', async () => {
+            let token = localStorage.getItem('token');
+            if (token && token.length > 0) {
+                if (this.model.cart.length == 0) {
+                    return alert('No tienes productos en tu carrito');
+                }
+                let totalPrice: any;
+                totalPrice = this.view.totalPrice.innerHTML;
+                totalPrice = parseFloat(totalPrice.substring(0, totalPrice.length - 1));
+                if (!totalPrice || totalPrice == 0) {
+                    return alert('No tienes productos en tu carrito');
+                }
+                let response = await this.model.makeOrder(token, totalPrice);
+                console.log(response);
+                if (response) {
+                    if (response.error == true) {
+                        alert('Error realizando la compra');
+                    }
+                    if (response.insertId != 0) {
+                        alert('Realizó exitosamente la compra');
+                    }
+                    return this.showCart();
+                }
+
+            } else {
+                alert('Debes iniciar sesión para poder realizar un pedido');
+            }
         });
     }
 
@@ -196,8 +222,7 @@ export class IndexController {
                     }
                     return alert('Error al agregar al carrito');
                 }
-
-
+                this.showCart();
             } else {
                 return alert('Debes iniciar sesión para poder agregar al carrito');
             }
@@ -216,7 +241,8 @@ export class IndexController {
             }
             if (rows) {
                 if (rows.length == 0) {
-                    return this.model.cart = [];
+                    this.model.cart = [];
+                    return this.view.showFloatCart(this.model.cart);
                 }
                 let rows2: any = await this.model.showCart(rows);
                 if (rows2) {
@@ -225,18 +251,19 @@ export class IndexController {
                         for (let i = 0; i < rows.length; i++) {
                             for (let j = 0; j < rows2.length; j++) {
                                 if (rows[i].id_product == rows2[j].ID) {
-                                    this.model.cart.push({ID: rows2[j].ID, amount: rows[i].amount, brand: rows2[j].brand, description: rows2[j].description, discount: rows2[j].discount, image: rows2[j].image, name: rows2[j].name, price: rows2[j].price});
+                                    this.model.cart.push({ ID: rows2[j].ID, amount: rows[i].amount, brand: rows2[j].brand, description: rows2[j].description, discount: rows2[j].discount, image: rows2[j].image, name: rows2[j].name, price: rows2[j].price });
                                     break;
                                 }
                             }
                         }
-                    }else{
+                    } else {
                         this.model.cart = [];
                     }
                 }
             }
         }
         this.view.showFloatCart(this.model.cart);
+        this.addMethodBuy();
     }
 
     addToFavorites = async (id: number) => {
@@ -275,7 +302,6 @@ export class IndexController {
         this.view.pagination(this.model.pages, this.model.currentPage);
         this.addMethodFavorites();
         this.addMethodAddCart();
-        this.addMethodBuy();
     }
 
 }
