@@ -18,7 +18,7 @@ export class IndexController {
             this.addMethodSearch();
             this.addMethodShowFavorites();
         });
-        this.isLogged = () => __awaiter(this, void 0, void 0, function* () {
+        this.getFavorites = () => __awaiter(this, void 0, void 0, function* () {
             let token = localStorage.getItem('token');
             if (token && token.length > 0) {
                 let response = yield this.model.isLogged(token);
@@ -133,7 +133,7 @@ export class IndexController {
             }
         });
         this.showProducts = () => __awaiter(this, void 0, void 0, function* () {
-            yield this.isLogged();
+            yield this.getFavorites();
             yield this.showCart();
             this.view.showProducts(this.model.products, this.model.favorites, this.model.currentPage);
             this.view.pagination(this.model.pages, this.model.currentPage);

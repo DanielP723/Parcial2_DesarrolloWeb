@@ -74,7 +74,7 @@ export class IndexController {
         });
     }
 
-    isLogged = async () => {
+    getFavorites = async () => {
         let token = localStorage.getItem('token');
         if (token && token.length > 0) {
             let response = await this.model.isLogged(token);
@@ -289,7 +289,7 @@ export class IndexController {
 
     addMethodsDeleteCart() {
         for (let i = 0; i < this.view.idsCart.length; i++) {
-            let id = this.view.idsCart[i]
+            let id = this.view.idsCart[i];
             let temp = this.view.getElement('quitarCarro' + id);
             if (temp) {
                 temp.addEventListener('click', async () => {
@@ -340,7 +340,7 @@ export class IndexController {
     }
 
     showProducts = async () => {
-        await this.isLogged();
+        await this.getFavorites();
         await this.showCart();
         this.view.showProducts(this.model.products, this.model.favorites, this.model.currentPage);
         this.view.pagination(this.model.pages, this.model.currentPage);

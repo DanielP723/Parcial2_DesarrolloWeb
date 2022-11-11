@@ -241,7 +241,6 @@ export default class MysqlController {
                 return res.json({ error: true, message: 'e101' });
             }
             if(rows){
-                console.log(rows);
                 return res.json(rows);
             }
         })

@@ -136,6 +136,10 @@ header .cantidadProductos {
     margin: -8px 0 120px 20px;
 }
 
+.quitarProducto{
+    cursor: pointer;
+}
+
 .contenidoAside .btnCarro {
     width: 280px;
     margin: 20px auto 40px auto;
