@@ -32,6 +32,12 @@ class ProductModel{
         const products = await this.MongoDBC.ProductSchema.find({ID: {$in: allIds}});
         fn(products);
     }
+
+    public getProductById = async (id: any, fn: Function) => {
+        this.MongoDBC.connection();
+        const products = await this.MongoDBC.ProductSchema.find({ID: id});
+        fn(products);
+    }
 }
 
 export default ProductModel;

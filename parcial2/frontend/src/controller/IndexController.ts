@@ -39,7 +39,6 @@ export class IndexController {
                     return alert('No tienes productos en tu carrito');
                 }
                 let response = await this.model.makeOrder(token, totalPrice);
-                console.log(response);
                 if (response) {
                     if (response.error == true) {
                         alert('Error realizando la compra');
@@ -62,7 +61,7 @@ export class IndexController {
                     if (response.error == false) {
                         return window.open('./cart.html', '_self');
                     }
-                    if(response.error == true){
+                    if (response.error == true) {
                         return alert('No has iniciado sesión');
                     }
                     return alert('Error. No se puede abrir el carrito');
@@ -341,7 +340,7 @@ export class IndexController {
 
     isLogged = async () => {
         let token = localStorage.getItem('token');
-        if(token && token.length > 0){
+        if (token && token.length > 0) {
             let response = await this.model.isLogged(token);
             if (response.error == false) {
                 return true;
@@ -352,13 +351,36 @@ export class IndexController {
         return false;
     }
 
-    addMethodSignOut(){
+    addMethodSignOut() {
         let temp = this.view.singOut;
-        if(temp){
+        if (temp) {
             temp.addEventListener('click', () => {
                 localStorage.removeItem('token');
                 return window.location.reload();
             })
+        }
+    }
+
+    addMethodOpenModal() {
+        for (let i = 0; i < this.view.ids.length; i++) {
+            let id = this.view.ids[i];
+            let temp = this.view.getElement('openModal' + id);
+            if (temp) {
+                temp.addEventListener('click', () => this.openModal(id));
+            }
+        }
+    }
+
+    openModal = async (id: number) => {
+        let response = await this.model.getProduct(id);
+        if (response) {
+            if(response[0].ID){
+                this.view.showModal(response[0], this.model.favorites);
+                let temp = this.view.getElement('cerrarModal');
+                if(temp){
+                    temp.addEventListener('click', () => this.view.cerrarModal());
+                }
+            }
         }
     }
 
@@ -372,6 +394,7 @@ export class IndexController {
         let bool = await this.isLogged();
         this.view.generateListAccount(bool);
         this.addMethodSignOut();
+        this.addMethodOpenModal();
     }
 
 }

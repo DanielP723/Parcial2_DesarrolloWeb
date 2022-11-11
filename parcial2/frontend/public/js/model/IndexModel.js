@@ -117,6 +117,7 @@ export class IndexModel {
             return res;
         });
         this.showFavorites = (ids) => __awaiter(this, void 0, void 0, function* () {
+            console.log(ids);
             yield fetch(`${this.URI}mongo/getProductsById`, {
                 method: 'POST',
                 body: JSON.stringify({ ids: ids }),
@@ -160,6 +161,17 @@ export class IndexModel {
             let response = yield fetch(`${this.URI}mysql/deleteProductCart`, {
                 method: 'POST',
                 body: JSON.stringify({ id: id, token: token }),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            });
+            let res = yield response.json();
+            return res;
+        });
+        this.getProduct = (id) => __awaiter(this, void 0, void 0, function* () {
+            let response = yield fetch(`${this.URI}mongo/getProductById`, {
+                method: 'POST',
+                body: JSON.stringify({ id: id }),
                 headers: {
                     "Content-type": "application/json"
                 }

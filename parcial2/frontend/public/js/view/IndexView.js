@@ -1,5 +1,6 @@
 export class IndexView {
     constructor() {
+        this.modalConst = document.querySelector('.modaal');
         this.getElement = (selector) => document.getElementById(selector);
         this.container = this.getElement('container');
         // Pagination Bar Elements
@@ -18,6 +19,7 @@ export class IndexView {
         this.btnBuy = this.getElement('btn2');
         this.btnGoCart = this.getElement('btn');
         this.account = this.getElement('listaCuenta');
+        this.modal = this.getElement('allModal');
     }
     showProducts(products, favorites, page) {
         this.ids = [];
@@ -45,7 +47,7 @@ export class IndexView {
                 this.ids.push(products[index].ID);
                 html += "<img  src='" + products[index].image + "'alt='product" + String(index + 1) + "'>" +
                     "     </div>" +
-                    "    <div class='descripcion'> ";
+                    "    <div class='descripcion' id='openModal" + products[index].ID + "'> ";
                 if (products[index].name.length > 16) {
                     html += "<h4 id='nombre" + String(products[index].ID) + "'>" + products[index].name.substring(0, 13) + "...</h4>";
                 }
@@ -134,6 +136,45 @@ export class IndexView {
         }
         this.account.innerHTML = html;
         this.singOut = this.getElement('signOut');
+    }
+    showModal(product, favorites) {
+        let elementos = "<div class='izquierda_modal'>" +
+            "<a href='#' class='cerrar' id='cerrarModal'>x</a>" +
+            "<div class='imagenProducto_modal'>" +
+            "<img src='" + product.image + "' alt='' height='380'>" +
+            "</div>" +
+            "</div>" +
+            "<div class='derecha_modal'>" +
+            "<header id='headerModal'>" +
+            "<h2>" + product.name + "</h2>";
+        if (favorites.includes(parseInt(product.ID))) {
+            elementos += "<i class='fa-solid fa-heart corazonFavoritos'></i>";
+        }
+        else {
+            elementos += "<i class='fa-regular fa-heart corazonFavoritos'></i>";
+        }
+        elementos += "</header>" +
+            "<div class='informacion_modal'>" +
+            "<h4 class='medida_modal'>" + product.brand + "</h4>" +
+            "<h2 class='precio_modal'>" + product.price + "$</h2>" +
+            "<p class='sale_modal'>Sale a: 0.26$/ud.</p>" +
+            "</div>" +
+            "<div class='descripcion_modal'>" +
+            "<p class='drecripcionProducto_modal'>" + product.description + "</p>" +
+            "</div>" +
+            "<div class='pie_modal'>" +
+            "<input type='number' name='cantidad' id='cantidadAgregar' value='0' min='0' max='100'>" +
+            "<a href='#' id='anadirCarro_modal' class='anadirCarro'><i " +
+            "class='fa-solid fa-basket-shopping'></i> Añadir a la cesta</a>" +
+            "</div>" +
+            "</div>";
+        this.modal.innerHTML = elementos;
+        this.modalConst.classList.add('modal--show');
+        this.container.style.background = "#f2f2f2";
+    }
+    cerrarModal() {
+        this.modalConst.classList.remove('modal--show');
+        this.container.style.background = "#fff";
     }
     pagination(pages, currentPage) {
         let index = currentPage;

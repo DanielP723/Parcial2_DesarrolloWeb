@@ -19,6 +19,9 @@ export class IndexView {
     public totalPrice: any;
     private account: any;
     public singOut: any;
+    public modal: any;
+    public modalConst: any = document.querySelector('.modaal');
+    public closeModal: any;
 
     constructor() {
         this.container = this.getElement('container');
@@ -38,6 +41,7 @@ export class IndexView {
         this.btnBuy = this.getElement('btn2');
         this.btnGoCart = this.getElement('btn');
         this.account = this.getElement('listaCuenta');
+        this.modal = this.getElement('allModal');
     }
 
     public getElement = (selector: string): HTMLElement | null => document.getElementById(selector);
@@ -67,7 +71,7 @@ export class IndexView {
                 this.ids.push(products[index].ID);
                 html += "<img  src='" + products[index].image + "'alt='product" + String(index + 1) + "'>" +
                     "     </div>" +
-                    "    <div class='descripcion'> ";
+                    "    <div class='descripcion' id='openModal" + products[index].ID + "'> ";
                 if (products[index].name.length > 16) {
                     html += "<h4 id='nombre" + String(products[index].ID) + "'>" + products[index].name.substring(0, 13) + "...</h4>"
                 } else {
@@ -107,9 +111,9 @@ export class IndexView {
                 "<input type='number' class='cantidadPCarro' value='" + cart[i].amount + "' name='cantidadPCarro' id='cantidadPCarro" + cart[i].ID + "'  min='0' max='100'>" +
                 "</div>" +
                 "<p class='precioPCarro' id='precioPCarro'>" + cart[i].price + "$</p>" +
-                "<i id='quitarCarro"+cart[i].ID+"' class='fa-solid fa-trash quitarProducto'></i>" +
+                "<i id='quitarCarro" + cart[i].ID + "' class='fa-solid fa-trash quitarProducto'></i>" +
                 "</div>";
-                this.idsCart.push(cart[i].ID);
+            this.idsCart.push(cart[i].ID);
             subTotal += (parseInt(cart[i].amount) * parseFloat(cart[i].price));
         }
         html += "</div>" +
@@ -140,20 +144,60 @@ export class IndexView {
         this.totalPrice = this.getElement('precioTotal');
     }
 
-    generateListAccount(bool: boolean){
-        let html = "<li class='borde'><a href=''><i class='fa-solid fa-user' ></i>Mi cuenta</a></li>" + 
-        "<li class='borde' id='btnMisFavoritos2'><a href='#'><i class='fa-regular fa-heart'></i>Mis"+
-            "favoritos</a></li>"+
-        "<li class='borde'><a href=''><i class='fa-solid fa-check'></i>Mi carrito</a></li>";
-        if(bool){
+    generateListAccount(bool: boolean) {
+        let html = "<li class='borde'><a href=''><i class='fa-solid fa-user' ></i>Mi cuenta</a></li>" +
+            "<li class='borde' id='btnMisFavoritos2'><a href='#'><i class='fa-regular fa-heart'></i>Mis" +
+            "favoritos</a></li>" +
+            "<li class='borde'><a href=''><i class='fa-solid fa-check'></i>Mi carrito</a></li>";
+        if (bool) {
             html += "<li class='borde' id='signOut'><a href='#'><i class='fa-solid fa-right-from-bracket'></i>Cerrar Sesion</a></li>";
-        }else{
+        } else {
             html += "<li class='borde'><a href='./session/signIn.html'><i class='fa-solid fa-lock'></i>Entrar</a></li>" +
-                    "<li id='bordeN'><a href='./session/signUp.html'><i class='fa-solid fa-user-plus'></i>Crear"+
-                    " una cuenta</a></li>";
+                "<li id='bordeN'><a href='./session/signUp.html'><i class='fa-solid fa-user-plus'></i>Crear" +
+                " una cuenta</a></li>";
         }
         this.account.innerHTML = html;
         this.singOut = this.getElement('signOut');
+    }
+
+    showModal(product: any, favorites: any) {
+        let elementos = "<div class='izquierda_modal'>" +
+            "<a href='#' class='cerrar' id='cerrarModal'>x</a>" +
+            "<div class='imagenProducto_modal'>" +
+            "<img src='" + product.image + "' alt='' height='380'>" +
+            "</div>" +
+            "</div>" +
+            "<div class='derecha_modal'>" +
+            "<header id='headerModal'>" +
+            "<h2>" + product.name + "</h2>";
+        if (favorites.includes(parseInt(product.ID))) {
+            elementos += "<i class='fa-solid fa-heart corazonFavoritos'></i>";
+        } else {
+            elementos += "<i class='fa-regular fa-heart corazonFavoritos'></i>";
+        }
+        elementos += "</header>" +
+            "<div class='informacion_modal'>" +
+            "<h4 class='medida_modal'>" + product.brand + "</h4>" +
+            "<h2 class='precio_modal'>" + product.price + "$</h2>" +
+            "<p class='sale_modal'>Sale a: 0.26$/ud.</p>" +
+            "</div>" +
+            "<div class='descripcion_modal'>" +
+            "<p class='drecripcionProducto_modal'>" + product.description + "</p>" +
+            "</div>" +
+            "<div class='pie_modal'>" +
+            "<input type='number' name='cantidad' id='cantidadAgregar' value='0' min='0' max='100'>" +
+            "<a href='#' id='anadirCarro_modal' class='anadirCarro'><i " +
+            "class='fa-solid fa-basket-shopping'></i> Añadir a la cesta</a>" +
+            "</div>" +
+            "</div>";
+        this.modal.innerHTML = elementos;
+        this.modalConst.classList.add('modal--show');
+        this.container.style.background = "#f2f2f2";
+    }
+
+    cerrarModal() {
+        this.modalConst.classList.remove('modal--show');
+        this.container.style.background = "#fff";
     }
 
     pagination(pages: number, currentPage: number) {

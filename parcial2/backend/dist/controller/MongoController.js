@@ -29,6 +29,14 @@ class MongoController {
                 });
             }
         };
+        this.getProductById = (req, res) => {
+            let id = req.body.id;
+            if (id && id > 0) {
+                this.model.getProductById(id, (products) => {
+                    res.json(products);
+                });
+            }
+        };
         this.getProductsCart = (req, res) => {
             let ids = req.body.ids;
             if (ids && ids.length > 0) {

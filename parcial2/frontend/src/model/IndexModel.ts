@@ -139,6 +139,7 @@ export class IndexModel {
     }
 
     showFavorites = async (ids: any) => {
+        console.log(ids);
         await fetch(`${this.URI}mongo/getProductsById`, {
             method: 'POST',
             body: JSON.stringify({ ids: ids }),
@@ -189,6 +190,18 @@ export class IndexModel {
                 "Content-type": "application/json"
             }
         });
+        let res = await response.json();
+        return res;
+    }
+
+    getProduct = async (id: any) => {
+        let response = await fetch(`${this.URI}mongo/getProductById`, {
+            method: 'POST',
+            body: JSON.stringify({ id: id }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        })
         let res = await response.json();
         return res;
     }

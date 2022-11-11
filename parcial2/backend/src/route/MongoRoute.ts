@@ -18,6 +18,7 @@ class MongoRoute{
         this.router.post('/filter', this.controller.filterPriceProducts);
         this.router.post('/getProductsById', this.controller.getProductsById);
         this.router.post('/getCart', this.controller.getProductsCart);
+        this.router.post('/getProductById', this.controller.getProductById);
     }
 }
 

@@ -145,6 +145,18 @@ export class IndexController {
             }
             return false;
         });
+        this.openModal = (id) => __awaiter(this, void 0, void 0, function* () {
+            let response = yield this.model.getProduct(id);
+            if (response) {
+                if (response[0].ID) {
+                    this.view.showModal(response[0], this.model.favorites);
+                    let temp = this.view.getElement('cerrarModal');
+                    if (temp) {
+                        temp.addEventListener('click', () => this.view.cerrarModal());
+                    }
+                }
+            }
+        });
         this.showProducts = () => __awaiter(this, void 0, void 0, function* () {
             yield this.getFavorites();
             yield this.showCart();
@@ -155,6 +167,7 @@ export class IndexController {
             let bool = yield this.isLogged();
             this.view.generateListAccount(bool);
             this.addMethodSignOut();
+            this.addMethodOpenModal();
         });
         this.view = view;
         this.model = model;
@@ -177,7 +190,6 @@ export class IndexController {
                     return alert('No tienes productos en tu carrito');
                 }
                 let response = yield this.model.makeOrder(token, totalPrice);
-                console.log(response);
                 if (response) {
                     if (response.error == true) {
                         alert('Error realizando la compra');
@@ -369,6 +381,15 @@ export class IndexController {
                 localStorage.removeItem('token');
                 return window.location.reload();
             });
+        }
+    }
+    addMethodOpenModal() {
+        for (let i = 0; i < this.view.ids.length; i++) {
+            let id = this.view.ids[i];
+            let temp = this.view.getElement('openModal' + id);
+            if (temp) {
+                temp.addEventListener('click', () => this.openModal(id));
+            }
         }
     }
 }
