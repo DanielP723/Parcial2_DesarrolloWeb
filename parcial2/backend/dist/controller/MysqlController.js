@@ -26,8 +26,7 @@ class MysqlController {
                                 return res.json({ error: true, message: 'e101' });
                             }
                             if (rows) {
-                                const token = jwt.sign({ userId: email, password: password }, process.env.TOKEN_KEY, { expiresIn: "2h" });
-                                return res.header('authorization', token).json(rows);
+                                return res.json(rows);
                             }
                         });
                     }
@@ -36,6 +35,14 @@ class MysqlController {
             else {
                 res.json({ error: true, message: 'e101' });
             }
+        };
+        this.generateToken = (req, res) => {
+            const { email, password } = req.body;
+            if (email && password && email.length > 0 && password.length > 0) {
+                const token = jwt.sign({ email: email, password: password }, process.env.TOKEN_KEY, { expiresIn: "2h" });
+                return res.header('authorization', token).json({ error: false, message: 'Inicio de sesión exitoso', token: token });
+            }
+            return res.json({ error: true, message: 'e102' });
         };
         this.isLogged = (req, res) => {
             const token = req.body.token;
@@ -127,12 +134,17 @@ class MysqlController {
         this.searchFavorites = (req, res) => {
             const id = parseInt(req.body.id);
             const token = req.body.token;
+            console.log('aquiii');
+            console.log(token);
             if (!this.verifyToken(token)) {
+                console.log('aquiii4');
                 return res.json({ 'error': true, message: 'e104' });
             }
+            console.log('aquiii2');
             if (!id) {
                 return res.json({ 'error': true, message: 'e101' });
             }
+            console.log('aquiii3');
             let decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
             this.model.searchFavorites(id, decodedToken.email, (error, rows) => {
                 if (error) {
@@ -264,6 +276,7 @@ class MysqlController {
                 return false;
             }
             if (!decodedToken.email) {
+                console.log('aquiii5');
                 return false;
             }
             return true;

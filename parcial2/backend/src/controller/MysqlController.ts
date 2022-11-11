@@ -30,12 +30,7 @@ export default class MysqlController {
                             return res.json({ error: true, message: 'e101' });
                         }
                         if (rows) {
-                            const token = jwt.sign(
-                                { userId: email, password: password },
-                                process.env.TOKEN_KEY,
-                                { expiresIn: "2h" }
-                            );
-                            return res.header('authorization', token).json(rows);
+                            return res.json(rows);
                         }
                     });
                 }
@@ -43,6 +38,19 @@ export default class MysqlController {
         } else {
             res.json({ error: true, message: 'e101' });
         }
+    }
+
+    public generateToken = (req: Request, res: Response) => {
+        const { email, password } = req.body;
+        if (email && password && email.length > 0 && password.length > 0) {
+            const token = jwt.sign(
+                { email: email, password: password },
+                process.env.TOKEN_KEY,
+                { expiresIn: "2h" }
+            );
+            return res.header('authorization', token).json({ error: false, message: 'Inicio de sesión exitoso', token: token });
+        }
+        return res.json({ error: true, message: 'e102' });
     }
 
     public isLogged = (req: Request, res: Response) => {
@@ -139,12 +147,16 @@ export default class MysqlController {
     public searchFavorites = (req: Request, res: Response) => {
         const id = parseInt(req.body.id);
         const token = req.body.token;
-        if (!this.verifyToken(token)) {
+        console.log('aquiii');
+        console.log(token);
+        if (!this.verifyToken(token)) {console.log('aquiii4');
             return res.json({ 'error': true, message: 'e104' });
         }
+        console.log('aquiii2');
         if (!id) {
             return res.json({ 'error': true, message: 'e101' });
         }
+        console.log('aquiii3');
         let decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
         this.model.searchFavorites(id, decodedToken.email, (error: any, rows: any) => {
             if (error) {
@@ -236,11 +248,11 @@ export default class MysqlController {
         }
         let decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
         this.model.makeOrder(decodedToken.email, totalPrice, (error: any, rows: any) => {
-            if(error){
+            if (error) {
                 console.log(error);
                 return res.json({ error: true, message: 'e101' });
             }
-            if(rows){
+            if (rows) {
                 return res.json(rows);
             }
         })
@@ -275,7 +287,7 @@ export default class MysqlController {
             } catch {
                 return false;
             }
-            if (!decodedToken.email) {
+            if (!decodedToken.email) {console.log('aquiii5');
                 return false;
             }
             return true;

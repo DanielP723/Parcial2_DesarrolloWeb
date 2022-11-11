@@ -36,7 +36,7 @@ export class SignUpController {
         let entrar = false;
         let warnings = "";
         for (let i = 0; i < name.length; i++) {
-            if(alfabeto.includes(name[i].toLowerCase()) == false) {
+            if (alfabeto.includes(name[i].toLowerCase()) == false) {
                 warnings +=
                     "Nombre no válido. Solo se permiten caracteres alfabéticos\n";
                 entrar = true;
@@ -44,7 +44,7 @@ export class SignUpController {
             }
         }
         for (let i = 0; i < surname.length; i++) {
-            if(alfabeto.includes(surname[i].toLowerCase()) == false) {
+            if (alfabeto.includes(surname[i].toLowerCase()) == false) {
                 warnings +=
                     "Apellido no válido. Solo se permiten caracteres alfabéticos\n";
                 entrar = true;
@@ -98,17 +98,24 @@ export class SignUpController {
             alert(warnings);
         } else {
             let response = await this.model.addUser(name, surname, email, password);
-            if(response.error == true){
-                if(response.message == 'e103'){
+            if (response.error == true) {
+                if (response.message == 'e103') {
                     alert('Email ya registrado');
                     return;
-                }else{
+                } else {
                     alert('No se pudo registrar el usuario');
                     return window.location.reload();
                 }
             }
-            if(response.insertId != 0){
+            if (response.insertId != 0) {
                 alert('Usuario exitosamente registrado');
+                let response = await this.model.generateToken(email, password);
+                if (response) {
+                    if (response.error == false) {
+                        localStorage.setItem('token', response.token);
+                        return window.open('../index.html', '_self');
+                    }
+                }
                 return window.open('../index.html', '_self');
             }
             alert('No se pudo registrar el usuario');

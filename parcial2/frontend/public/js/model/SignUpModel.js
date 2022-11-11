@@ -21,5 +21,16 @@ export class SignUpModel {
             let res = yield response.json();
             return res;
         });
+        this.generateToken = (email, password) => __awaiter(this, void 0, void 0, function* () {
+            let response = yield fetch(`${this.URI}mysql/generateToken`, {
+                method: 'POST',
+                body: JSON.stringify({ email: email, password: password }),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            });
+            let res = yield response.json();
+            return res;
+        });
     }
 }

@@ -106,6 +106,13 @@ export class SignUpController {
                 }
                 if (response.insertId != 0) {
                     alert('Usuario exitosamente registrado');
+                    let response = yield this.model.generateToken(email, password);
+                    if (response) {
+                        if (response.error == false) {
+                            localStorage.setItem('token', response.token);
+                            return window.open('../index.html', '_self');
+                        }
+                    }
                     return window.open('../index.html', '_self');
                 }
                 alert('No se pudo registrar el usuario');

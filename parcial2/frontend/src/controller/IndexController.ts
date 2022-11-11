@@ -339,6 +339,29 @@ export class IndexController {
         }
     }
 
+    isLogged = async () => {
+        let token = localStorage.getItem('token');
+        if(token && token.length > 0){
+            let response = await this.model.isLogged(token);
+            if (response.error == false) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    addMethodSignOut(){
+        let temp = this.view.singOut;
+        if(temp){
+            temp.addEventListener('click', () => {
+                localStorage.removeItem('token');
+                return window.location.reload();
+            })
+        }
+    }
+
     showProducts = async () => {
         await this.getFavorites();
         await this.showCart();
@@ -346,6 +369,9 @@ export class IndexController {
         this.view.pagination(this.model.pages, this.model.currentPage);
         this.addMethodFavorites();
         this.addMethodAddCart();
+        let bool = await this.isLogged();
+        this.view.generateListAccount(bool);
+        this.addMethodSignOut();
     }
 
 }

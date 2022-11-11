@@ -10,15 +10,15 @@ export class IndexView {
     public filterElements: any;
     // List of ids of products on the view
     public ids: any;
-    // Heart icons list for add to favorites
-    public hearts: any;
     public btnFavorites: any;
-    public floatCart: any;
+    private floatCart: any;
     public idsCart: any;
     // Btn 'Realizar pedido'
     public btnBuy: any;
     public btnGoCart: any;
     public totalPrice: any;
+    private account: any;
+    public singOut: any;
 
     constructor() {
         this.container = this.getElement('container');
@@ -33,11 +33,11 @@ export class IndexView {
         document.querySelectorAll(".range-input input"), document.querySelector(".slider .progress"), 5];
         this.logo = this.getElement('imgLogo');
         this.ids = [];
-        this.hearts = [];
         this.btnFavorites = this.getElement('btnMisFavoritos');
         this.floatCart = this.getElement('carroCompras');
         this.btnBuy = this.getElement('btn2');
         this.btnGoCart = this.getElement('btn');
+        this.account = this.getElement('listaCuenta');
     }
 
     public getElement = (selector: string): HTMLElement | null => document.getElementById(selector);
@@ -138,6 +138,22 @@ export class IndexView {
         this.btnBuy = this.getElement('btn2');
         this.btnGoCart = this.getElement('btn');
         this.totalPrice = this.getElement('precioTotal');
+    }
+
+    generateListAccount(bool: boolean){
+        let html = "<li class='borde'><a href=''><i class='fa-solid fa-user' ></i>Mi cuenta</a></li>" + 
+        "<li class='borde' id='btnMisFavoritos2'><a href='#'><i class='fa-regular fa-heart'></i>Mis"+
+            "favoritos</a></li>"+
+        "<li class='borde'><a href=''><i class='fa-solid fa-check'></i>Mi carrito</a></li>";
+        if(bool){
+            html += "<li class='borde' id='signOut'><a href='#'><i class='fa-solid fa-right-from-bracket'></i>Cerrar Sesion</a></li>";
+        }else{
+            html += "<li class='borde'><a href='./session/signIn.html'><i class='fa-solid fa-lock'></i>Entrar</a></li>" +
+                    "<li id='bordeN'><a href='./session/signUp.html'><i class='fa-solid fa-user-plus'></i>Crear"+
+                    " una cuenta</a></li>";
+        }
+        this.account.innerHTML = html;
+        this.singOut = this.getElement('signOut');
     }
 
     pagination(pages: number, currentPage: number) {

@@ -132,6 +132,19 @@ export class IndexController {
                 }
             }
         });
+        this.isLogged = () => __awaiter(this, void 0, void 0, function* () {
+            let token = localStorage.getItem('token');
+            if (token && token.length > 0) {
+                let response = yield this.model.isLogged(token);
+                if (response.error == false) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            return false;
+        });
         this.showProducts = () => __awaiter(this, void 0, void 0, function* () {
             yield this.getFavorites();
             yield this.showCart();
@@ -139,6 +152,9 @@ export class IndexController {
             this.view.pagination(this.model.pages, this.model.currentPage);
             this.addMethodFavorites();
             this.addMethodAddCart();
+            let bool = yield this.isLogged();
+            this.view.generateListAccount(bool);
+            this.addMethodSignOut();
         });
         this.view = view;
         this.model = model;
@@ -344,6 +360,15 @@ export class IndexController {
                     }
                 }));
             }
+        }
+    }
+    addMethodSignOut() {
+        let temp = this.view.singOut;
+        if (temp) {
+            temp.addEventListener('click', () => {
+                localStorage.removeItem('token');
+                return window.location.reload();
+            });
         }
     }
 }

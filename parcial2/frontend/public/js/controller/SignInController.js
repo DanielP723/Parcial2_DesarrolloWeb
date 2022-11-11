@@ -15,11 +15,8 @@ export class SignInController {
             }
             let response = yield this.model.signIn(email, password);
             if (response.error == true) {
-                if (response.message == 'e102') {
-                    return alert('Contraseña inválida');
-                }
-                if (response.message == 'e103') {
-                    return alert('Usuario no registrado');
+                if (response.message == 'e102' || response.message == 'e103') {
+                    return alert('Contraseña o correo inválido');
                 }
                 if (response.message == 'e101') {
                     return alert('No se pudo verificar');
