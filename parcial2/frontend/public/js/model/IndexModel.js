@@ -95,7 +95,7 @@ export class IndexModel {
             return res;
         });
         this.getCartId = (token) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/getCartId`, {
+            let response = yield fetch(`${this.URI}mysql/getCartId`, {
                 method: 'POST',
                 body: JSON.stringify({ token: token }),
                 headers: {
@@ -157,7 +157,7 @@ export class IndexModel {
             return res;
         });
         this.deleteProductCart = (id, token) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/deleteProductCart`, {
+            let response = yield fetch(`${this.URI}mysql/deleteProductCart`, {
                 method: 'POST',
                 body: JSON.stringify({ id: id, token: token }),
                 headers: {

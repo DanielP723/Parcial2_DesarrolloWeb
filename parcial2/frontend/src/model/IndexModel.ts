@@ -115,7 +115,7 @@ export class IndexModel {
     }
 
     getCartId = async (token: any) => {
-        let response = await fetch(`${this.URI}api/getCartId`, {
+        let response = await fetch(`${this.URI}mysql/getCartId`, {
             method: 'POST',
             body: JSON.stringify({ token: token }),
             headers: {
@@ -182,7 +182,7 @@ export class IndexModel {
     }
 
     deleteProductCart = async (id: number, token: string) => {
-        let response = await fetch(`${this.URI}api/deleteProductCart`, {
+        let response = await fetch(`${this.URI}mysql/deleteProductCart`, {
             method: 'POST',
             body: JSON.stringify({ id: id, token: token }),
             headers: {

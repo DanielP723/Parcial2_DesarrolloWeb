@@ -1,6 +1,6 @@
 export class SignUpModel{
 
-    private URI = 'http://localhost:1802/';
+    private URI = 'http://localhost:1802/api/';
 
     constructor(){
 
