@@ -1,0 +1,295 @@
+openapi: 3.0.1
+info:
+  title: Buena vida store.
+  description: Aplicación Ecomerce.
+  version: 1.0.0
+servers:
+  - url: http://localhost:1802/
+tags:
+  - name: usuarios
+    description: Este la información relacionada con el registro y inicio de sesion de cada usuario.
+  - name: productos
+    description: Información relacionada con los productos de la tienda.
+  
+paths:
+  /addUser:
+    post:
+      tags:
+      - usuarios
+      summary: Inserta la información de un nuevo usuario.
+      parameters:
+      - $ref: '#/components/parameters/info'
+      requestBody:
+        content: 
+          application/mysql:
+            schema:
+              $ref: '#/components/schemas/BodyClientPost'
+        required: true
+      responses:
+        200:
+          description: el registro del usuario fue exitoso.
+          content: 
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ExitoClientPost'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+  
+  /signIn:
+    get:
+      tags:
+      - usuarios
+      summary: Obtiene la informacion de la BD de un usuario 
+      parameters:
+      - $ref: '#/components/parameters/sigIn'
+      responses:
+        200: 
+          description: (OK) la informacíon se obtuvo corretamente.
+          content: 
+            application/mysql: 
+              schema: 
+                $ref: '#/components/schemas/ExitoClientGet'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+
+  /showFavorites:
+    post:
+      tags:
+      - productos
+      summary: Muestra los productos marcados como favoritos por el usuario.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      responses:
+        200:
+          description: Se muestran los productos que el usuario selecciono como favoritos.
+          content: 
+            application/mysql:
+              schema: 
+                $ref: '#/components/schemas/FavoritosClient'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      
+
+  /searchFavorites:
+    post:
+      tags:
+      - productos
+      summary: Buscar productos marcados como favoritos.
+      parameters:
+        - $ref: '#/components/parameters/producto'
+        - $ref: '#/components/parameters/correo'
+      requestBody:
+        content: 
+          application/mysql:
+            schema:
+              $ref: '#/components/schemas/searchFavoritos'
+        required: true
+      responses:
+        200:
+          description: los resultados son.
+          content: 
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/searchFavoritos'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      
+  
+  #======= CAMBIAR ESTE POST!!! ===============#
+  /isLogged:
+    post:
+      tags:
+      - usuarios
+      summary: verifica si el usuario esta logueado.
+      parameters:
+      - $ref: '#/components/parameters/token'
+      responses:
+        200:
+          description: el usuario esta logueado.
+          content: 
+            application/mysql:
+              schema: 
+                $ref: '#/components/schemas/isLogged'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      
+
+  /addToCart:
+    post:
+      tags:
+      - productos
+      summary: agregar producto.
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/producto'
+      requestBody:
+        content: 
+          application/mysql:
+            schema:
+              $ref: '#/components/schemas/addToCart'
+        required: true
+      responses:
+        200:
+          description: el el producto se agrego exitosamente.
+          content: 
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/addToCart'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+
+components:
+  responses:
+    Unauthorized:
+      description: (Unauthorized) no hay autorización previa
+    NotFound: 
+      description: (NotFound) no se encontro la información.
+    BadRequest:
+      description: (BadRequest) los datos enviados son incorrectos o hay datos requeridos que no fuern diligenciados.
+    ServerError:
+      description: Error en el servidor.
+  
+  parameters: 
+    token:
+      name: token
+      description: token de autenticación para cada usuario.
+      required: true
+    info:
+      name: información
+      description: Nombre, Apellido, Correo electronico, Clave.
+      required: true
+    sigIn:
+      name: información
+      description: correo electronico, clave.
+      required: true
+    producto:
+      name: idProducto
+      description: id del producto que se va a buscar.
+      required: true 
+    correo:
+      name: mail
+      description: correo del usuario.
+      required: true
+  
+  schemas:
+    BodyClientPost:
+      type: object
+      properties:
+        nombre:
+          type: string
+          description: Nombre del user.
+        apellido:
+          type: string
+          description: Apellido del user.
+        correo:
+          type: string
+          description: email del user.
+        clave:
+          type: string
+          description: clave de la cuenta del user.
+        
+    ExitoClientPost:
+      type: object
+      properties:
+        idUser:
+          type: integer
+          description: en caso de ser exitoso ek registro nos indica 1.
+        tokenUser:
+          type: string
+          description: Token de autenticación del usuario.
+          
+    ExitoClientGet:
+      type: object
+      properties:
+        nombre:
+          type: string
+          description: Nombre del user.
+        apellido:
+          type: string
+          description: Apellido del user.
+        correo:
+          type: string
+          description: email del user.
+  
+    sigIn:
+      type: object
+      properties:
+        correo:
+          type: string
+          description: Correo electronico del usuario.
+        clave:
+          type: string
+          description: Clave correspondiente el usuario.
+  
+    FavoritosClient:
+      type: object
+      properties:
+        idUser:
+          type: integer
+        idProducto:
+          type: integer
+        emailUsuario:
+          type: string
+          description: Nombre del producto seleccionado como favorito.
+    
+    
+    searchFavoritos:
+      type: object
+      properties:
+        idProducto:
+          type: string
+    
+    isLogged:
+      type: object
+      properties:
+        message:
+          type: string
+    
+    addToCart:
+      type: object
+      properties:
+        id:
+          type: integer
+        amount:
+          type: integer
+        email:
+          type: string
+    
+    
+    
