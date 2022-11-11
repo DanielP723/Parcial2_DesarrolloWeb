@@ -33,8 +33,8 @@ const path_1 = __importDefault(require("path"));
 class Server {
     constructor() {
         this.route = () => {
-            this.backend.use('/api', this.mongoRouter.router);
-            this.backend.use('/api', this.mysqlRouter.router);
+            this.backend.use('/api/mongo', this.mongoRouter.router);
+            this.backend.use('/api/mysql', this.mysqlRouter.router);
         };
         this.mongoRouter = new MongoRoute_1.default();
         this.mysqlRouter = new MysqlRoute_1.default();

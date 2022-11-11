@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 export class CartModel {
     constructor() {
-        this.URI = 'http://localhost:1802/';
+        this.URI = 'http://localhost:1802/api/';
         this.cart = [];
         this.getCartId = (token) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/getCartId`, {
+            let response = yield fetch(`${this.URI}mysql/getCartId`, {
                 method: 'POST',
                 body: JSON.stringify({ token: token }),
                 headers: {
@@ -23,7 +23,7 @@ export class CartModel {
             return res;
         });
         this.showCart = (ids) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/getProductsById`, {
+            let response = yield fetch(`${this.URI}mongo/getProductsById`, {
                 method: 'POST',
                 body: JSON.stringify({ ids: ids }),
                 headers: {
@@ -34,7 +34,7 @@ export class CartModel {
             return res;
         });
         this.makeOrder = (token, totalPrice) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/makeOrder`, {
+            let response = yield fetch(`${this.URI}mysql/makeOrder`, {
                 method: 'POST',
                 body: JSON.stringify({ token: token, cart: this.cart, totalPrice: totalPrice }),
                 headers: {
@@ -45,7 +45,7 @@ export class CartModel {
             return res;
         });
         this.deleteProductCart = (id, token) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/deleteProductCart`, {
+            let response = yield fetch(`${this.URI}mysql/deleteProductCart`, {
                 method: 'POST',
                 body: JSON.stringify({ id: id, token: token }),
                 headers: {

@@ -1,6 +1,6 @@
 export class CartModel{
 
-    public URI = 'http://localhost:1802/';
+    public URI = 'http://localhost:1802/api/';
     public cart: any = [];
 
     constructor(){
@@ -8,7 +8,7 @@ export class CartModel{
     }
 
     getCartId = async (token: any) => {
-        let response = await fetch(`${this.URI}api/getCartId`, {
+        let response = await fetch(`${this.URI}mysql/getCartId`, {
             method: 'POST',
             body: JSON.stringify({ token: token }),
             headers: {
@@ -20,7 +20,7 @@ export class CartModel{
     }
 
     showCart = async (ids: any) => {
-        let response = await fetch(`${this.URI}api/getProductsById`, {
+        let response = await fetch(`${this.URI}mongo/getProductsById`, {
             method: 'POST',
             body: JSON.stringify({ ids: ids }),
             headers: {
@@ -32,7 +32,7 @@ export class CartModel{
     }
 
     makeOrder = async (token: string, totalPrice: number) => {
-        let response = await fetch(`${this.URI}api/makeOrder`, {
+        let response = await fetch(`${this.URI}mysql/makeOrder`, {
             method: 'POST',
             body: JSON.stringify({ token: token, cart: this.cart, totalPrice: totalPrice }),
             headers: {
@@ -44,7 +44,7 @@ export class CartModel{
     }
 
     deleteProductCart = async (id: number, token: string) => {
-        let response = await fetch(`${this.URI}api/deleteProductCart`, {
+        let response = await fetch(`${this.URI}mysql/deleteProductCart`, {
             method: 'POST',
             body: JSON.stringify({ id: id, token: token }),
             headers: {

@@ -24,8 +24,8 @@ class Server {
     }
 
     public route = (): void => {
-        this.backend.use('/api', this.mongoRouter.router);
-        this.backend.use('/api', this.mysqlRouter.router);
+        this.backend.use('/api/mongo', this.mongoRouter.router);
+        this.backend.use('/api/mysql', this.mysqlRouter.router);
     }
 
     public start(){

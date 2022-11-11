@@ -2,7 +2,7 @@ import { json } from "express";
 
 export class IndexModel {
 
-    public URI = 'http://localhost:1802/';
+    public URI = 'http://localhost:1802/api/';
     public products: any;
     public pages: number;
     public currentPage: number;
@@ -19,7 +19,7 @@ export class IndexModel {
     }
 
     saveProducts = async () => {
-        await fetch(`${this.URI}api/products`)
+        await fetch(`${this.URI}mongo/products`)
             .then(res => res.json())
             .then(data => {
                 if (data != NaN && data != null) {
@@ -34,7 +34,7 @@ export class IndexModel {
     }
 
     isLogged = async (token: any) => {
-        let response = await fetch(`${this.URI}api/isLogged`, {
+        let response = await fetch(`${this.URI}mysql/isLogged`, {
             method: 'POST',
             body: JSON.stringify({ token: token }),
             headers: {
@@ -53,7 +53,7 @@ export class IndexModel {
     }
 
     searchProducts = async (query: string) => {
-        await fetch(`${this.URI}api/search`, {
+        await fetch(`${this.URI}mongo/search`, {
             method: 'POST',
             body: JSON.stringify({ query: query }),
             headers: {
@@ -72,7 +72,7 @@ export class IndexModel {
     }
 
     filterPriceProducts = async (min: number, max: number) => {
-        await fetch(`${this.URI}api/filter`, {
+        await fetch(`${this.URI}mongo/filter`, {
             method: 'POST',
             body: JSON.stringify({ min: min, max: max }),
             headers: {
@@ -91,7 +91,7 @@ export class IndexModel {
     }
 
     addToFavorites = async (id: number, token: string) => {
-        let response = await fetch(`${this.URI}api/searchFavorites`, {
+        let response = await fetch(`${this.URI}mysql/searchFavorites`, {
             method: 'POST',
             body: JSON.stringify({ id: id, token: token }),
             headers: {
@@ -103,7 +103,7 @@ export class IndexModel {
     }
 
     addToCart = async (id: number, token: string) => {
-        let response = await fetch(`${this.URI}api/addToCart`, {
+        let response = await fetch(`${this.URI}mysql/addToCart`, {
             method: 'POST',
             body: JSON.stringify({ id: id, token: token }),
             headers: {
@@ -127,7 +127,7 @@ export class IndexModel {
     }
 
     getFavoritesId = async (token: any) => {
-        let response = await fetch(`${this.URI}api/showFavorites`, {
+        let response = await fetch(`${this.URI}mysql/showFavorites`, {
             method: 'POST',
             body: JSON.stringify({ token: token }),
             headers: {
@@ -139,7 +139,7 @@ export class IndexModel {
     }
 
     showFavorites = async (ids: any) => {
-        await fetch(`${this.URI}api/getProductsById`, {
+        await fetch(`${this.URI}mongo/getProductsById`, {
             method: 'POST',
             body: JSON.stringify({ ids: ids }),
             headers: {
@@ -157,11 +157,8 @@ export class IndexModel {
             .catch(err => console.log(err));
     }
 
-
-
-    // ME Falta arreglar esto. cambiar la dirección del fetch
     showCart = async (ids: any) => {
-        let response = await fetch(`${this.URI}api/getProductsById`, {
+        let response = await fetch(`${this.URI}mongo/getProductsById`, {
             method: 'POST',
             body: JSON.stringify({ ids: ids }),
             headers: {
@@ -173,7 +170,7 @@ export class IndexModel {
     }
 
     makeOrder = async (token: string, totalPrice: number) => {
-        let response = await fetch(`${this.URI}api/makeOrder`, {
+        let response = await fetch(`${this.URI}mysql/makeOrder`, {
             method: 'POST',
             body: JSON.stringify({ token: token, cart: this.cart, totalPrice: totalPrice }),
             headers: {

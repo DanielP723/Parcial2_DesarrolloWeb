@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 export class IndexModel {
     constructor() {
-        this.URI = 'http://localhost:1802/';
+        this.URI = 'http://localhost:1802/api/';
         this.favorites = [];
         this.cart = [];
         this.saveProducts = () => __awaiter(this, void 0, void 0, function* () {
-            yield fetch(`${this.URI}api/products`)
+            yield fetch(`${this.URI}mongo/products`)
                 .then(res => res.json())
                 .then(data => {
                 if (data != NaN && data != null) {
@@ -27,7 +27,7 @@ export class IndexModel {
                 .catch(err => console.log(err));
         });
         this.isLogged = (token) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/isLogged`, {
+            let response = yield fetch(`${this.URI}mysql/isLogged`, {
                 method: 'POST',
                 body: JSON.stringify({ token: token }),
                 headers: {
@@ -37,7 +37,7 @@ export class IndexModel {
             return response.json();
         });
         this.searchProducts = (query) => __awaiter(this, void 0, void 0, function* () {
-            yield fetch(`${this.URI}api/search`, {
+            yield fetch(`${this.URI}mongo/search`, {
                 method: 'POST',
                 body: JSON.stringify({ query: query }),
                 headers: {
@@ -55,7 +55,7 @@ export class IndexModel {
                 .catch(err => console.log(err));
         });
         this.filterPriceProducts = (min, max) => __awaiter(this, void 0, void 0, function* () {
-            yield fetch(`${this.URI}api/filter`, {
+            yield fetch(`${this.URI}mongo/filter`, {
                 method: 'POST',
                 body: JSON.stringify({ min: min, max: max }),
                 headers: {
@@ -73,7 +73,7 @@ export class IndexModel {
                 .catch(err => console.log(err));
         });
         this.addToFavorites = (id, token) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/searchFavorites`, {
+            let response = yield fetch(`${this.URI}mysql/searchFavorites`, {
                 method: 'POST',
                 body: JSON.stringify({ id: id, token: token }),
                 headers: {
@@ -84,7 +84,7 @@ export class IndexModel {
             return res;
         });
         this.addToCart = (id, token) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/addToCart`, {
+            let response = yield fetch(`${this.URI}mysql/addToCart`, {
                 method: 'POST',
                 body: JSON.stringify({ id: id, token: token }),
                 headers: {
@@ -106,7 +106,7 @@ export class IndexModel {
             return res;
         });
         this.getFavoritesId = (token) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/showFavorites`, {
+            let response = yield fetch(`${this.URI}mysql/showFavorites`, {
                 method: 'POST',
                 body: JSON.stringify({ token: token }),
                 headers: {
@@ -117,7 +117,7 @@ export class IndexModel {
             return res;
         });
         this.showFavorites = (ids) => __awaiter(this, void 0, void 0, function* () {
-            yield fetch(`${this.URI}api/getProductsById`, {
+            yield fetch(`${this.URI}mongo/getProductsById`, {
                 method: 'POST',
                 body: JSON.stringify({ ids: ids }),
                 headers: {
@@ -134,9 +134,8 @@ export class IndexModel {
                 .then(() => this.currentPage = 1)
                 .catch(err => console.log(err));
         });
-        // ME Falta arreglar esto. cambiar la dirección del fetch
         this.showCart = (ids) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/getProductsById`, {
+            let response = yield fetch(`${this.URI}mongo/getProductsById`, {
                 method: 'POST',
                 body: JSON.stringify({ ids: ids }),
                 headers: {
@@ -147,7 +146,7 @@ export class IndexModel {
             return res;
         });
         this.makeOrder = (token, totalPrice) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/makeOrder`, {
+            let response = yield fetch(`${this.URI}mysql/makeOrder`, {
                 method: 'POST',
                 body: JSON.stringify({ token: token, cart: this.cart, totalPrice: totalPrice }),
                 headers: {

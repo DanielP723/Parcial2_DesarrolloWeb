@@ -11,7 +11,7 @@ export class SignUpModel {
     constructor() {
         this.URI = 'http://localhost:1802/';
         this.addUser = (name, surname, email, password) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/addUser`, {
+            let response = yield fetch(`${this.URI}mysql/addUser`, {
                 method: 'POST',
                 body: JSON.stringify({ name: name, surname: surname, email: email, password: password }),
                 headers: {

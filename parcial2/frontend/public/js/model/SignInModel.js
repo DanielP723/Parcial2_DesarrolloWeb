@@ -11,7 +11,7 @@ export class SignInModel {
     constructor() {
         this.URI = 'http://localhost:1802/';
         this.signIn = (email, password) => __awaiter(this, void 0, void 0, function* () {
-            let response = yield fetch(`${this.URI}api/signIn`, {
+            let response = yield fetch(`${this.URI}mysql/signIn`, {
                 method: 'POST',
                 body: JSON.stringify({ email: email, password: password }),
                 headers: {

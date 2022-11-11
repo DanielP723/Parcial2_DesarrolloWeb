@@ -7,7 +7,7 @@ export class SignInModel{
     }
 
     signIn = async (email: string, password: string) => {
-        let response = await fetch(`${this.URI}api/signIn`, {
+        let response = await fetch(`${this.URI}mysql/signIn`, {
             method: 'POST',
             body: JSON.stringify({ email: email, password: password }),
             headers: {

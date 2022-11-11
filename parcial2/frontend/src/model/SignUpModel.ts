@@ -7,7 +7,7 @@ export class SignUpModel{
     }
 
     addUser = async (name: string, surname: string, email: string, password: string) => {
-        let response = await fetch(`${this.URI}api/addUser`, {
+        let response = await fetch(`${this.URI}mysql/addUser`, {
             method: 'POST',
             body: JSON.stringify({ name: name, surname: surname, email: email, password: password }),
             headers: {
